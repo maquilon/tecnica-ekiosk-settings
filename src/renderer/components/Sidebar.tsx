@@ -4,7 +4,7 @@ import ConfirmDialog from './ui/ConfirmDialog';
 import {
   Plus, Search, Copy, Trash2, Power, ArrowUpDown, Filter,
 } from 'lucide-react';
-import tecnicaLogo from '../assets/tecnica-logo.svg';
+import tecnicaLogo from '../assets/logo_tecnicasystems.png';
 
 export default function Sidebar() {
   const {
@@ -26,8 +26,8 @@ export default function Sidebar() {
         }`}
       >
         <div className={`p-4 border-b ${d ? 'border-[#1c1c1c]' : 'border-gray-200'}`}>
-          <div className="flex items-center justify-center mb-4">
-            <img src={tecnicaLogo} alt="Tecnica Systems" className="h-8 w-auto" />
+          <div className="flex items-center justify-center mb-8">
+            <img src={tecnicaLogo} alt="Tecnica Systems" className="h-20 w-auto" />
           </div>
           <div className="flex items-center justify-between mb-3">
             <h2 className={`text-sm font-semibold ${d ? 'text-gray-200' : 'text-gray-800'}`}>
