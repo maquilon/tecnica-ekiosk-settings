@@ -1,0 +1,130 @@
+[
+  {
+    "company": {
+      "id": "tecnica",
+      "name": "Tecnica Systems",
+      "displayName": "Tecnica Systems, LLC.",
+      "domain": "tecnicasystems.com",
+      "supportEmail": "support@tecnicasystems.com",
+      "timezone": "America/New_York",
+      "dateFormat": "MM/DD/YYYY",
+      "currency": "USD"
+    },
+    "branding": {
+      "logoUrl": "https://example.com/logo.png",
+      "faviconUrl": "https://example.com/favicon.ico",
+      "backgroundColor": "#000000",
+      "surfaceColor": "#111111",
+      "primaryColor": "#4285F4",
+      "secondaryColor": "#34A853",
+      "accentColor": "#FBBC05",
+      "errorColor": "#EA4335",
+      "warningColor": "#F9AB00",
+      "successColor": "#34A853",
+      "textPrimaryColor": "#FFFFFF",
+      "textSecondaryColor": "#B0B0B0",
+      "labelTextColor": "#E0E0E0",
+      "borderColor": "#2C2C2C",
+      "shadowColor": "rgba(0,0,0,0.25)"
+    },
+    "buttons": {
+      "primaryBackground": "#4285F4",
+      "primaryTextColor": "#FFFFFF",
+      "secondaryBackground": "#FFFFFF",
+      "secondaryTextColor": "#4285F4",
+      "borderRadius": 8,
+      "fontWeight": 600
+    },
+    "typography": {
+      "fontFamily": "Inter",
+      "headingFontFamily": "Inter",
+      "fontSizeBase": 16,
+      "fontScale": 1
+    },
+    "layout": {
+      "themeMode": "dark",
+      "sidebarStyle": "expanded",
+      "headerFixed": true,
+      "cardBorderRadius": 12,
+      "containerWidth": "fluid"
+    },
+    "localization": {
+      "defaultLanguage": "en",
+      "supportedLanguages": [
+        "en",
+        "es"
+      ],
+      "rtl": false
+    },
+    "metadata": {
+      "version": "1.0.0",
+      "createdAt": "2026-05-16T10:00:00Z",
+      "updatedAt": "2026-05-16T21:47:57.234Z"
+    },
+    "active": true
+  },
+  {
+    "company": {
+      "id": "google",
+      "name": "Google",
+      "displayName": "Google Inc.",
+      "domain": "",
+      "supportEmail": "",
+      "timezone": "America/New_York",
+      "dateFormat": "MM/DD/YYYY",
+      "currency": "USD"
+    },
+    "branding": {
+      "logoUrl": "",
+      "faviconUrl": "",
+      "backgroundColor": "#000000",
+      "surfaceColor": "#111111",
+      "primaryColor": "#4285F4",
+      "secondaryColor": "#34A853",
+      "accentColor": "#FBBC05",
+      "errorColor": "#EA4335",
+      "warningColor": "#F9AB00",
+      "successColor": "#34A853",
+      "textPrimaryColor": "#FFFFFF",
+      "textSecondaryColor": "#B0B0B0",
+      "labelTextColor": "#E0E0E0",
+      "borderColor": "#2C2C2C",
+      "shadowColor": "rgba(0,0,0,0.25)"
+    },
+    "buttons": {
+      "primaryBackground": "#4285F4",
+      "primaryTextColor": "#FFFFFF",
+      "secondaryBackground": "#FFFFFF",
+      "secondaryTextColor": "#4285F4",
+      "borderRadius": 8,
+      "fontWeight": 600
+    },
+    "typography": {
+      "fontFamily": "Inter",
+      "headingFontFamily": "Inter",
+      "fontSizeBase": 16,
+      "fontScale": 1
+    },
+    "layout": {
+      "themeMode": "dark",
+      "sidebarStyle": "expanded",
+      "headerFixed": true,
+      "cardBorderRadius": 12,
+      "containerWidth": "fluid"
+    },
+    "localization": {
+      "defaultLanguage": "en",
+      "supportedLanguages": [
+        "en",
+        "es"
+      ],
+      "rtl": false
+    },
+    "metadata": {
+      "version": "1.0.0",
+      "createdAt": "2026-05-16T10:00:00Z",
+      "updatedAt": "2026-05-16T20:55:27.551Z"
+    },
+    "active": false
+  }
+]

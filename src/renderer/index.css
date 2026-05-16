@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    -webkit-app-region: no-drag;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 3px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  .light ::-webkit-scrollbar-thumb {
+    background: #ccc;
+  }
+
+  .light ::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }
+}
+
+@layer components {
+  .drag-region {
+    -webkit-app-region: drag;
+  }
+
+  .card {
+    @apply rounded-xl border transition-all duration-200;
+  }
+
+  .card-dark {
+    @apply bg-[#111111] border-[#2c2c2c];
+  }
+
+  .card-light {
+    @apply bg-white border-gray-200 shadow-sm;
+  }
+
+  .input-base {
+    @apply w-full rounded-lg px-3 py-2 text-sm outline-none transition-all duration-200
+           focus:ring-2 focus:ring-brand-primary/50;
+  }
+
+  .input-dark {
+    @apply bg-[#1a1a1a] border border-[#2c2c2c] text-white placeholder-gray-500;
+  }
+
+  .input-light {
+    @apply bg-gray-50 border border-gray-300 text-gray-900 placeholder-gray-400;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium
+           transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2
+           disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply bg-brand-primary text-white hover:bg-blue-600 focus:ring-brand-primary;
+  }
+
+  .btn-secondary {
+    @apply border text-sm;
+  }
+
+  .btn-secondary-dark {
+    @apply border-[#2c2c2c] text-gray-300 hover:bg-[#1a1a1a];
+  }
+
+  .btn-secondary-light {
+    @apply border-gray-300 text-gray-700 hover:bg-gray-50;
+  }
+
+  .btn-danger {
+    @apply bg-brand-error text-white hover:bg-red-600 focus:ring-brand-error;
+  }
+
+  .tab-btn {
+    @apply px-4 py-2.5 text-sm font-medium rounded-lg transition-all duration-200;
+  }
+
+  .tab-btn-active-dark {
+    @apply bg-brand-primary/10 text-brand-primary;
+  }
+
+  .tab-btn-active-light {
+    @apply bg-brand-primary/10 text-brand-primary;
+  }
+
+  .tab-btn-inactive-dark {
+    @apply text-gray-400 hover:text-gray-200 hover:bg-white/5;
+  }
+
+  .tab-btn-inactive-light {
+    @apply text-gray-500 hover:text-gray-700 hover:bg-gray-100;
+  }
+
+  .section-title {
+    @apply text-xs font-semibold uppercase tracking-wider mb-3;
+  }
+
+  .section-title-dark {
+    @apply text-gray-500;
+  }
+
+  .section-title-light {
+    @apply text-gray-400;
+  }
+}

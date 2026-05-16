@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 160" fill="none">
+  <!-- Circle logo -->
+  <circle cx="60" cy="55" r="50" fill="#1d5da0"/>
+  <circle cx="60" cy="55" r="42" fill="#1d5da0" stroke="white" stroke-width="2" stroke-opacity="0.3"/>
+  <!-- Cards inside circle -->
+  <g transform="translate(60,55)">
+    <!-- Back card -->
+    <rect x="-28" y="-20" width="40" height="28" rx="3" fill="white" fill-opacity="0.4" transform="rotate(-30)"/>
+    <!-- Front card -->
+    <rect x="-22" y="-14" width="40" height="28" rx="3" fill="white" fill-opacity="0.9" transform="rotate(-30)"/>
+    <rect x="-18" y="-2" width="30" height="4" rx="1" fill="#1d5da0" transform="rotate(-30)"/>
+  </g>
+  <!-- Tecnica text -->
+  <text x="115" y="75" font-family="Arial, Helvetica, sans-serif" font-size="62" font-weight="bold" font-style="italic" fill="#1d5da0" letter-spacing="-1">Tecnica</text>
+  <!-- Tagline -->
+  <text x="115" y="130" font-family="Arial, Helvetica, sans-serif" font-size="22" font-style="italic" fill="#1d5da0">A Leader in Point of Sale Solutions...</text>
+</svg>
