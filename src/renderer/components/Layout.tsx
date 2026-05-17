@@ -9,11 +9,9 @@ import TypographyTab from './tabs/TypographyTab';
 import LayoutTab from './tabs/LayoutTab';
 import LocalizationTab from './tabs/LocalizationTab';
 import MetadataTab from './tabs/MetadataTab';
-import JsonEditorTab from './tabs/JsonEditorTab';
-import ThemePreview from './ThemePreview';
 import {
   Building2, Palette, SquareMousePointer, Type, LayoutDashboard, Globe, Info,
-  Code2, Eye, Sun, Moon, Save, FolderOpen, Download, RotateCcw, Upload,
+  Sun, Moon, Save, FolderOpen, Download, RotateCcw, Upload,
 } from 'lucide-react';
 import { TabId } from '../types/config';
 
@@ -25,8 +23,6 @@ const TABS: { id: TabId; label: string; icon: typeof Building2 }[] = [
   { id: 'layout', label: 'Layout', icon: LayoutDashboard },
   { id: 'localization', label: 'Localization', icon: Globe },
   { id: 'metadata', label: 'Metadata', icon: Info },
-  { id: 'json', label: 'JSON Editor', icon: Code2 },
-  { id: 'preview', label: 'Preview', icon: Eye },
 ];
 
 export default function Layout() {
@@ -151,8 +147,6 @@ export default function Layout() {
       case 'layout': return <LayoutTab />;
       case 'localization': return <LocalizationTab />;
       case 'metadata': return <MetadataTab />;
-      case 'json': return <JsonEditorTab />;
-      case 'preview': return <ThemePreview />;
       default: return null;
     }
   };

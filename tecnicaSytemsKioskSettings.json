@@ -8,7 +8,8 @@
       "supportEmail": "support@tecnicasystems.com",
       "timezone": "America/New_York",
       "dateFormat": "MM/DD/YYYY",
-      "currency": "USD"
+      "currency": "USD",
+      "serviceTypes": ["Deli", "Food", "Coffee"]
     },
     "branding": {
       "logoUrl": "https://example.com/logo.png",
@@ -59,20 +60,25 @@
     "metadata": {
       "version": "1.0.0",
       "createdAt": "2026-05-16T10:00:00Z",
-      "updatedAt": "2026-05-16T21:47:57.234Z"
+      "updatedAt": "2026-05-16T22:35:47.020Z"
     },
-    "active": true
+    "session": {
+  "idleTimeoutSeconds": 300,
+  "idleWarningSeconds": 60
+},
+    "active": false
   },
   {
     "company": {
-      "id": "google",
-      "name": "Google",
-      "displayName": "Google Inc.",
+      "id": "pueblo1",
+      "name": "Supermercados Pueblo",
+      "displayName": "Pueblo",
       "domain": "",
       "supportEmail": "",
       "timezone": "America/New_York",
       "dateFormat": "MM/DD/YYYY",
-      "currency": "USD"
+      "currency": "USD",
+      "serviceTypes": ["Deli", "Food", "Coffee"]
     },
     "branding": {
       "logoUrl": "",
@@ -92,10 +98,10 @@
       "shadowColor": "rgba(0,0,0,0.25)"
     },
     "buttons": {
-      "primaryBackground": "#4285F4",
+      "primaryBackground": "#F45543",
       "primaryTextColor": "#FFFFFF",
       "secondaryBackground": "#FFFFFF",
-      "secondaryTextColor": "#4285F4",
+      "secondaryTextColor": "#F44343",
       "borderRadius": 8,
       "fontWeight": 600
     },
@@ -123,8 +129,12 @@
     "metadata": {
       "version": "1.0.0",
       "createdAt": "2026-05-16T10:00:00Z",
-      "updatedAt": "2026-05-16T20:55:27.551Z"
+      "updatedAt": "2026-05-16T22:36:04.681Z"
     },
-    "active": false
+    "session": {
+      "idleTimeoutSeconds": 300,
+      "idleWarningSeconds": 60
+    },
+    "active": true
   }
 ]

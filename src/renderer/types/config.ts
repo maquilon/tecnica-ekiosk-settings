@@ -92,9 +92,7 @@ export type TabId =
   | 'typography'
   | 'layout'
   | 'localization'
-  | 'metadata'
-  | 'json'
-  | 'preview';
+  | 'metadata';
 
 export const defaultCompanyConfig: CompanyConfig = {
   company: {
