@@ -35,6 +35,48 @@
     "zod": "^3.23.0",
     "zustand": "^4.5.0"
   },
+  "build": {
+    "appId": "com.tecnicasystems.ekiosk-settings",
+    "productName": "Tecnica eKiosk Settings",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "extraFiles": [
+      {
+        "from": "tecnicaSytemsKioskSettings.json",
+        "to": "tecnicaSytemsKioskSettings.json"
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "icon": "src/renderer/assets/logo_tecnicasystems.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": true,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Tecnica eKiosk Settings"
+    },
+    "portable": {
+      "artifactName": "${productName}-Portable-${version}.${ext}"
+    }
+  },
   "devDependencies": {
     "@types/node": "^20.14.0",
     "@types/react": "^18.3.0",
