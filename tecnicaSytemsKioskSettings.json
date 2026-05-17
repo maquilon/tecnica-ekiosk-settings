@@ -60,13 +60,13 @@
     "metadata": {
       "version": "1.0.0",
       "createdAt": "2026-05-16T10:00:00Z",
-      "updatedAt": "2026-05-17T15:05:06.427Z"
+      "updatedAt": "2026-05-17T15:35:30.709Z"
     },
     "session": {
       "idleTimeoutSeconds": 300,
       "idleWarningSeconds": 60
     },
-    "active": false
+    "active": true
   },
   {
     "company": {
@@ -135,6 +135,6 @@
       "idleTimeoutSeconds": 300,
       "idleWarningSeconds": 60
     },
-    "active": true
+    "active": false
   }
 ]

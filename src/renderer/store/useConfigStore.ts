@@ -2,6 +2,16 @@ import { create } from 'zustand';
 import { v4 as uuidv4 } from 'uuid';
 import { CompanyConfig, TabId, defaultCompanyConfig } from '../types/config';
 
+/** Ensures exactly one company is active; falls back to the first entry. */
+function ensureSingleActive(companies: CompanyConfig[]): CompanyConfig[] {
+  if (companies.length === 0) return companies;
+  const hasActive = companies.some((c) => c.active);
+  if (!hasActive) {
+    return companies.map((c, i) => (i === 0 ? { ...c, active: true } : c));
+  }
+  return companies;
+}
+
 interface ConfigStore {
   companies: CompanyConfig[];
   selectedCompanyId: string | null;
@@ -49,7 +59,7 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
   filterActive: 'all',
   showPreview: false,
 
-  setCompanies: (companies) => set({ companies, isDirty: true }),
+  setCompanies: (companies) => set({ companies: ensureSingleActive(companies), isDirty: true }),
 
   addCompany: () => {
     const id = uuidv4().slice(0, 8);
@@ -68,12 +78,16 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
         updatedAt: now,
       },
     };
-    set((state) => ({
-      companies: [...state.companies, newCompany],
-      selectedCompanyId: id,
-      activeTab: 'company',
-      isDirty: true,
-    }));
+    set((state) => {
+      const isFirst = state.companies.length === 0;
+      const updated = [...state.companies, { ...newCompany, active: isFirst }];
+      return {
+        companies: updated,
+        selectedCompanyId: id,
+        activeTab: 'company',
+        isDirty: true,
+      };
+    });
   },
 
   updateCompany: (id, section, data) => {
@@ -103,7 +117,9 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
 
   deleteCompany: (id) => {
     set((state) => {
-      const filtered = state.companies.filter((c) => c.company.id !== id);
+      const filtered = ensureSingleActive(
+        state.companies.filter((c) => c.company.id !== id),
+      );
       return {
         companies: filtered,
         selectedCompanyId:
@@ -136,19 +152,24 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
       },
     };
     set((state) => ({
-      companies: [...state.companies, duplicate],
+      companies: [...state.companies, { ...duplicate, active: false }],
       selectedCompanyId: newId,
       isDirty: true,
     }));
   },
 
   toggleActive: (id) => {
-    set((state) => ({
-      companies: state.companies.map((c) =>
-        c.company.id === id ? { ...c, active: !c.active } : c,
-      ),
-      isDirty: true,
-    }));
+    set((state) => {
+      const target = state.companies.find((c) => c.company.id === id);
+      if (!target) return state;
+      const activating = !target.active;
+      const updated = activating
+        ? state.companies.map((c) => ({ ...c, active: c.company.id === id }))
+        : state.companies.map((c) =>
+            c.company.id === id ? { ...c, active: false } : c,
+          );
+      return { companies: ensureSingleActive(updated), isDirty: true };
+    });
   },
 
   selectCompany: (id) => set({ selectedCompanyId: id }),
@@ -211,7 +232,7 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
       const parsed = JSON.parse(json);
       const data = Array.isArray(parsed) ? parsed : [parsed];
       set({
-        companies: data,
+        companies: ensureSingleActive(data),
         selectedCompanyId: data[0]?.company?.id ?? null,
         isDirty: false,
       });
