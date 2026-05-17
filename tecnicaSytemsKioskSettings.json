@@ -9,7 +9,7 @@
       "timezone": "America/New_York",
       "dateFormat": "MM/DD/YYYY",
       "currency": "USD",
-      "serviceType": "Deli"
+      "serviceType": "Food"
     },
     "branding": {
       "logoUrl": "https://example.com/logo.png",
@@ -60,13 +60,13 @@
     "metadata": {
       "version": "1.0.0",
       "createdAt": "2026-05-16T10:00:00Z",
-      "updatedAt": "2026-05-17T15:35:30.709Z"
+      "updatedAt": "2026-05-17T16:20:45.898Z"
     },
     "session": {
       "idleTimeoutSeconds": 300,
       "idleWarningSeconds": 60
     },
-    "active": true
+    "active": false
   },
   {
     "company": {
@@ -98,7 +98,7 @@
       "shadowColor": "rgba(0,0,0,0.25)"
     },
     "buttons": {
-      "primaryBackground": "#F45543",
+      "primaryBackground": "#F44343",
       "primaryTextColor": "#FFFFFF",
       "secondaryBackground": "#FFFFFF",
       "secondaryTextColor": "#F44343",
@@ -118,6 +118,10 @@
       "cardBorderRadius": 12,
       "containerWidth": "fluid"
     },
+    "session": {
+      "idleTimeoutSeconds": 300,
+      "idleWarningSeconds": 60
+    },
     "localization": {
       "defaultLanguage": "en",
       "supportedLanguages": [
@@ -129,12 +133,8 @@
     "metadata": {
       "version": "1.0.0",
       "createdAt": "2026-05-16T10:00:00Z",
-      "updatedAt": "2026-05-17T14:32:40.430Z"
+      "updatedAt": "2026-05-17T16:23:51.059Z"
     },
-    "session": {
-      "idleTimeoutSeconds": 300,
-      "idleWarningSeconds": 60
-    },
-    "active": false
+    "active": true
   }
 ]

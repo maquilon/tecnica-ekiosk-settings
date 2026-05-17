@@ -12,7 +12,7 @@ import LocalizationTab from './tabs/LocalizationTab';
 import MetadataTab from './tabs/MetadataTab';
 import {
   Building2, Palette, SquareMousePointer, Type, LayoutDashboard, Timer, Globe, Info,
-  Sun, Moon, Save, FolderOpen, Download, RotateCcw, Upload,
+  Sun, Moon, Save, FolderOpen, Download, Upload,
 } from 'lucide-react';
 import { TabId } from '../types/config';
 
@@ -29,10 +29,10 @@ const TABS: { id: TabId; label: string; icon: typeof Building2 }[] = [
 
 export default function Layout() {
   const {
-    activeTab, setActiveTab, theme, setTheme, selectedCompanyId,
+    activeTab, setActiveTab, theme, setTheme,
     getSelectedCompany, isDirty, setIsDirty, currentFilePath,
     setCurrentFilePath, exportToJson, loadFromJson, setCompanies,
-    companies, resetCompany,
+    companies,
   } = useConfigStore();
 
   const autosaveTimer = useRef<ReturnType<typeof setTimeout>>();
@@ -240,15 +240,6 @@ export default function Layout() {
             <div className={`flex items-center justify-between px-6 py-3 border-t flex-shrink-0 ${
               d ? 'bg-[#0a0a0a] border-[#1c1c1c]' : 'bg-gray-50 border-gray-200'
             }`}>
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => selectedCompanyId && resetCompany(selectedCompanyId)}
-                  className={`btn text-xs ${d ? 'btn-secondary btn-secondary-dark' : 'btn-secondary btn-secondary-light'}`}
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  Reset
-                </button>
-              </div>
               <div className="flex items-center gap-2">
                 {isDirty && (
                   <span className={`text-xs ${d ? 'text-gray-500' : 'text-gray-400'}`}>

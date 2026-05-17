@@ -40,7 +40,6 @@ interface ConfigStore {
   setSortBy: (sort: 'name' | 'date') => void;
   setFilterActive: (filter: 'all' | 'active' | 'inactive') => void;
   setShowPreview: (show: boolean) => void;
-  resetCompany: (id: string) => void;
   getSelectedCompany: () => CompanyConfig | undefined;
   getFilteredCompanies: () => CompanyConfig[];
   loadFromJson: (json: string) => boolean;
@@ -181,21 +180,6 @@ export const useConfigStore = create<ConfigStore>((set, get) => ({
   setSortBy: (sort) => set({ sortBy: sort }),
   setFilterActive: (filter) => set({ filterActive: filter }),
   setShowPreview: (show) => set({ showPreview: show }),
-
-  resetCompany: (id) => {
-    set((state) => ({
-      companies: state.companies.map((c) =>
-        c.company.id === id
-          ? {
-              ...structuredClone(defaultCompanyConfig),
-              company: { ...defaultCompanyConfig.company, id, name: c.company.name, displayName: c.company.displayName },
-              metadata: { ...c.metadata, updatedAt: new Date().toISOString() },
-            }
-          : c,
-      ),
-      isDirty: true,
-    }));
-  },
 
   getSelectedCompany: () => {
     const state = get();
