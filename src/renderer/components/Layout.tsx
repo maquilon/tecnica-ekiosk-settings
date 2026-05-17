@@ -7,10 +7,11 @@ import BrandingTab from './tabs/BrandingTab';
 import ButtonsTab from './tabs/ButtonsTab';
 import TypographyTab from './tabs/TypographyTab';
 import LayoutTab from './tabs/LayoutTab';
+import SessionTab from './tabs/SessionTab';
 import LocalizationTab from './tabs/LocalizationTab';
 import MetadataTab from './tabs/MetadataTab';
 import {
-  Building2, Palette, SquareMousePointer, Type, LayoutDashboard, Globe, Info,
+  Building2, Palette, SquareMousePointer, Type, LayoutDashboard, Timer, Globe, Info,
   Sun, Moon, Save, FolderOpen, Download, RotateCcw, Upload,
 } from 'lucide-react';
 import { TabId } from '../types/config';
@@ -21,6 +22,7 @@ const TABS: { id: TabId; label: string; icon: typeof Building2 }[] = [
   { id: 'buttons', label: 'Buttons', icon: SquareMousePointer },
   { id: 'typography', label: 'Typography', icon: Type },
   { id: 'layout', label: 'Layout', icon: LayoutDashboard },
+  { id: 'session', label: 'Session', icon: Timer },
   { id: 'localization', label: 'Localization', icon: Globe },
   { id: 'metadata', label: 'Metadata', icon: Info },
 ];
@@ -145,6 +147,7 @@ export default function Layout() {
       case 'buttons': return <ButtonsTab />;
       case 'typography': return <TypographyTab />;
       case 'layout': return <LayoutTab />;
+      case 'session': return <SessionTab />;
       case 'localization': return <LocalizationTab />;
       case 'metadata': return <MetadataTab />;
       default: return null;

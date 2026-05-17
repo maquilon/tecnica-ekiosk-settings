@@ -60,6 +60,11 @@ export const localizationSchema = z.object({
   rtl: z.boolean(),
 });
 
+export const sessionSchema = z.object({
+  idleTimeoutSeconds: z.number().min(0),
+  idleWarningSeconds: z.number().min(0),
+});
+
 export const metadataSchema = z.object({
   version: z.string().min(1, 'Version is required'),
   createdAt: z.string(),
@@ -72,6 +77,7 @@ export const companyConfigSchema = z.object({
   buttons: buttonsSchema,
   typography: typographySchema,
   layout: layoutSchema,
+  session: sessionSchema,
   localization: localizationSchema,
   metadata: metadataSchema,
   active: z.boolean(),
@@ -82,6 +88,7 @@ export type Branding = z.infer<typeof brandingSchema>;
 export type Buttons = z.infer<typeof buttonsSchema>;
 export type Typography = z.infer<typeof typographySchema>;
 export type Layout = z.infer<typeof layoutSchema>;
+export type Session = z.infer<typeof sessionSchema>;
 export type Localization = z.infer<typeof localizationSchema>;
 export type Metadata = z.infer<typeof metadataSchema>;
 export type CompanyConfig = z.infer<typeof companyConfigSchema>;
@@ -92,6 +99,7 @@ export type TabId =
   | 'buttons'
   | 'typography'
   | 'layout'
+  | 'session'
   | 'localization'
   | 'metadata';
 
@@ -144,6 +152,10 @@ export const defaultCompanyConfig: CompanyConfig = {
     headerFixed: true,
     cardBorderRadius: 12,
     containerWidth: 'fluid',
+  },
+  session: {
+    idleTimeoutSeconds: 300,
+    idleWarningSeconds: 60,
   },
   localization: {
     defaultLanguage: 'en',
