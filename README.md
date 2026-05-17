@@ -173,3 +173,105 @@ The preload script exposes the following methods to the renderer via `window.ele
 3. **Edit** — Navigate between the eight configuration tabs and modify fields. Validation feedback appears in real-time.
 4. **Save** — Click *Save Configuration* or let autosave handle it. Changes write directly to the config file on disk.
 5. **Deploy** — The resulting JSON file is consumed by the eKiosk platform at runtime.
+
+---
+
+## Deployment on Windows Server 2025
+
+### Build Artifacts
+
+After running the build process, the `release/` directory contains two distributable formats:
+
+| File | Type | Description |
+|---|---|---|
+| `Tecnica eKiosk Settings Setup 1.0.0.exe` | NSIS Installer | Full installer with install/uninstall support |
+| `Tecnica eKiosk Settings-Portable-1.0.0.exe` | Portable | Single-file executable, no installation needed |
+
+### Prerequisites on the Target Server
+
+- **Windows Server 2025** (x64)
+- **.NET Framework 4.5+** (included by default in Windows Server 2025)
+- **Administrator privileges** for installer mode
+- No additional runtimes required — Electron bundles its own Chromium and Node.js
+
+### Option A: NSIS Installer (Recommended for Production)
+
+1. **Transfer the installer** to the Windows Server 2025 machine:
+   ```
+   release\Tecnica eKiosk Settings Setup 1.0.0.exe
+   ```
+
+2. **Run the installer as Administrator**:
+   - Right-click → *Run as administrator*
+   - Or from PowerShell:
+     ```powershell
+     Start-Process ".\Tecnica eKiosk Settings Setup 1.0.0.exe" -Verb RunAs
+     ```
+
+3. **Follow the installation wizard**:
+   - Choose the installation directory (default: `C:\Program Files\Tecnica eKiosk Settings`)
+   - The installer creates desktop and Start Menu shortcuts automatically
+
+4. **Configuration file location**:
+   - The app reads/writes the configuration at:
+     ```
+     C:\Tecnica_Systems\Kiosk_Settings\tecnicaSytemsKioskSettings.json
+     ```
+   - This directory is created automatically on first launch
+   - Place your existing configuration file here if migrating from another machine
+
+5. **Verify the installation**:
+   - Launch from the desktop shortcut or Start Menu
+   - Confirm the app loads and can read/write the configuration file
+
+### Option B: Portable Executable
+
+1. **Transfer the portable executable**:
+   ```
+   release\Tecnica eKiosk Settings-Portable-1.0.0.exe
+   ```
+
+2. **Place it in the desired directory** on the server (e.g., `C:\Tecnica_Systems\`)
+
+3. **Run directly** — no installation required:
+   ```powershell
+   & "C:\Tecnica_Systems\Tecnica eKiosk Settings-Portable-1.0.0.exe"
+   ```
+
+### Post-Deployment Configuration
+
+1. **Firewall**: No inbound ports are required — the app runs entirely locally.
+
+2. **File permissions**: Ensure the service account or user running the app has read/write access to:
+   ```
+   C:\Tecnica_Systems\Kiosk_Settings\tecnicaSytemsKioskSettings.json
+   ```
+
+3. **Auto-start (optional)**: To launch on server boot, create a Scheduled Task:
+   ```powershell
+   $action = New-ScheduledTaskAction -Execute "C:\Program Files\Tecnica eKiosk Settings\Tecnica eKiosk Settings.exe"
+   $trigger = New-ScheduledTaskTrigger -AtLogOn
+   $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries
+   Register-ScheduledTask -TaskName "Tecnica eKiosk Settings" -Action $action -Trigger $trigger -Settings $settings -RunLevel Highest
+   ```
+
+4. **Uninstall** (installer version only):
+   - Via *Settings → Apps → Installed apps → Tecnica eKiosk Settings → Uninstall*
+   - Or run the uninstaller from the installation directory
+
+### Building from Source for Windows
+
+If you need to rebuild the distributable on a development machine:
+
+```bash
+# Install dependencies
+npm install
+
+# Build the app (TypeScript + Vite)
+npm run build
+
+# Package for Windows (NSIS installer + portable)
+npx electron-builder --win --x64
+```
+
+The output will appear in the `release/` directory. Cross-compilation from macOS/Linux to Windows is supported by electron-builder out of the box.

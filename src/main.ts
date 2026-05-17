@@ -10,9 +10,17 @@ const SETTINGS_PATH = path.join(app.getPath('userData'), 'app-settings.json');
 
 // The config JSON file lives next to the .exe in production, or the project root in dev.
 const CONFIG_FILE_NAME = 'tecnicaSytemsKioskSettings.json';
+const CONFIG_DIR_WIN = 'C:\\Tecnica_Systems\\Kiosk_Settings';
 const CONFIG_FILE_PATH = isDev
   ? path.join(process.cwd(), CONFIG_FILE_NAME)
-  : path.join(path.dirname(process.execPath), CONFIG_FILE_NAME);
+  : process.platform === 'win32'
+    ? path.join(CONFIG_DIR_WIN, CONFIG_FILE_NAME)
+    : path.join(path.dirname(process.execPath), CONFIG_FILE_NAME);
+
+// Ensure the config directory exists in production on Windows
+if (!isDev && process.platform === 'win32') {
+  fs.mkdirSync(CONFIG_DIR_WIN, { recursive: true });
+}
 
 interface AppSettings {
   lastFilePath?: string;
