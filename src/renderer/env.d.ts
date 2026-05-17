@@ -1,8 +1,6 @@
 /// <reference types="vite/client" />
 
 interface ElectronAPI {
-  saveFileDialog: (data: string, filePath?: string) => Promise<string | null>;
-  openFileDialog: () => Promise<{ filePath: string; content: string } | null>;
   saveFile: (filePath: string, data: string) => Promise<boolean>;
   readFile: (filePath: string) => Promise<string | null>;
   getSettings: () => Promise<{

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -84,36 +84,6 @@ app.on('activate', () => {
 });
 
 // --- IPC Handlers ---
-
-ipcMain.handle('dialog:saveFile', async (_event, data: string, filePath?: string) => {
-  if (!filePath) {
-    const result = await dialog.showSaveDialog(mainWindow!, {
-      title: 'Save Configuration',
-      defaultPath: 'company-config.json',
-      filters: [{ name: 'JSON Files', extensions: ['json'] }],
-    });
-    if (result.canceled || !result.filePath) return null;
-    filePath = result.filePath;
-  }
-  fs.writeFileSync(filePath, data, 'utf-8');
-  const settings = loadSettings();
-  saveSettings({ ...settings, lastFilePath: filePath });
-  return filePath;
-});
-
-ipcMain.handle('dialog:openFile', async () => {
-  const result = await dialog.showOpenDialog(mainWindow!, {
-    title: 'Open Configuration',
-    filters: [{ name: 'JSON Files', extensions: ['json'] }],
-    properties: ['openFile'],
-  });
-  if (result.canceled || result.filePaths.length === 0) return null;
-  const fp = result.filePaths[0];
-  const content = fs.readFileSync(fp, 'utf-8');
-  const settings = loadSettings();
-  saveSettings({ ...settings, lastFilePath: fp });
-  return { filePath: fp, content };
-});
 
 ipcMain.handle('file:save', async (_event, filePath: string, data: string) => {
   fs.writeFileSync(filePath, data, 'utf-8');

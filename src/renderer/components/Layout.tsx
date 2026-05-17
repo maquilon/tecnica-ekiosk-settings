@@ -12,7 +12,7 @@ import LocalizationTab from './tabs/LocalizationTab';
 import MetadataTab from './tabs/MetadataTab';
 import {
   Building2, Palette, SquareMousePointer, Type, LayoutDashboard, Timer, Globe, Info,
-  Sun, Moon, Save, FolderOpen, Download, Upload,
+  Sun, Moon, Save,
 } from 'lucide-react';
 import { TabId } from '../types/config';
 
@@ -31,7 +31,7 @@ export default function Layout() {
   const {
     activeTab, setActiveTab, theme, setTheme,
     getSelectedCompany, isDirty, setIsDirty, currentFilePath,
-    setCurrentFilePath, exportToJson, loadFromJson, setCompanies,
+    exportToJson,
     companies,
   } = useConfigStore();
 
@@ -61,55 +61,6 @@ export default function Layout() {
       toast.error('Failed to save');
     }
   }, [exportToJson, setIsDirty]);
-
-  const handleOpen = useCallback(async () => {
-    try {
-      if (window.electronAPI) {
-        const result = await window.electronAPI.openFileDialog();
-        if (result) {
-          const ok = loadFromJson(result.content);
-          if (ok) {
-            setCurrentFilePath(result.filePath);
-            toast.success('Configuration loaded');
-          } else {
-            toast.error('Invalid JSON format');
-          }
-        }
-      }
-    } catch {
-      toast.error('Failed to open file');
-    }
-  }, [loadFromJson, setCurrentFilePath]);
-
-  const handleImport = useCallback(() => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = '.json';
-    input.onchange = (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = () => {
-        const ok = loadFromJson(reader.result as string);
-        if (ok) toast.success('Imported successfully');
-        else toast.error('Invalid JSON format');
-      };
-      reader.readAsText(file);
-    };
-    input.click();
-  }, [loadFromJson]);
-
-  const handleExport = useCallback(() => {
-    const json = exportToJson();
-    const blob = new Blob([json], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'company-config.json';
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success('Exported successfully');
-  }, [exportToJson]);
 
   useEffect(() => {
     if (isDirty && currentFilePath && window.electronAPI) {
@@ -176,16 +127,6 @@ export default function Layout() {
           )}
         </div>
         <div className="flex items-center gap-1">
-          <button onClick={handleOpen} className={`p-2 rounded-lg transition-colors ${d ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-600'}`} title="Open File">
-            <FolderOpen className="w-4 h-4" />
-          </button>
-          <button onClick={handleImport} className={`p-2 rounded-lg transition-colors ${d ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-600'}`} title="Import JSON">
-            <Upload className="w-4 h-4" />
-          </button>
-          <button onClick={handleExport} className={`p-2 rounded-lg transition-colors ${d ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-600'}`} title="Export JSON">
-            <Download className="w-4 h-4" />
-          </button>
-          <div className={`w-px h-5 mx-1 ${d ? 'bg-[#2c2c2c]' : 'bg-gray-200'}`} />
           <button
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
             className={`p-2 rounded-lg transition-colors ${d ? 'hover:bg-white/5 text-gray-400' : 'hover:bg-gray-100 text-gray-600'}`}

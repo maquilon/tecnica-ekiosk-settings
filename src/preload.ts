@@ -1,9 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 
 const electronAPI = {
-  saveFileDialog: (data: string, filePath?: string) =>
-    ipcRenderer.invoke('dialog:saveFile', data, filePath),
-  openFileDialog: () => ipcRenderer.invoke('dialog:openFile'),
   saveFile: (filePath: string, data: string) =>
     ipcRenderer.invoke('file:save', filePath, data),
   readFile: (filePath: string) => ipcRenderer.invoke('file:read', filePath),
