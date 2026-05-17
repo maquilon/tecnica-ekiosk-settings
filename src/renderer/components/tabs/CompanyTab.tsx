@@ -14,6 +14,7 @@ const TIMEZONES = [
 
 const DATE_FORMATS = ['MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD', 'DD-MMM-YYYY'];
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'BRL', 'INR', 'CNY', 'MXN'];
+const SERVICE_TYPES = ['Deli', 'Food', 'Coffee'];
 
 export default function CompanyTab() {
   const { getSelectedCompany, updateCompany, theme } = useConfigStore();
@@ -63,6 +64,12 @@ export default function CompanyTab() {
           <InputField label="Domain" error={errors.domain?.message} {...register('domain')} placeholder="example.com" />
           <InputField label="Support Email" error={errors.supportEmail?.message} {...register('supportEmail')} type="email" placeholder="support@example.com" />
         </div>
+        <SelectField
+          label="Service Type"
+          error={errors.serviceType?.message}
+          options={SERVICE_TYPES.map((s) => ({ value: s, label: s }))}
+          {...register('serviceType')}
+        />
       </div>
 
       <div className={`card ${d ? 'card-dark' : 'card-light'} p-6 space-y-5 mt-4`}>

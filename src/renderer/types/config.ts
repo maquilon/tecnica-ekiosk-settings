@@ -9,6 +9,7 @@ export const companySchema = z.object({
   timezone: z.string().min(1, 'Timezone is required'),
   dateFormat: z.string().min(1, 'Date format is required'),
   currency: z.string().min(1, 'Currency is required'),
+  serviceType: z.enum(['Deli', 'Food', 'Coffee'], { required_error: 'Service type is required' }),
 });
 
 export const brandingSchema = z.object({
@@ -104,6 +105,7 @@ export const defaultCompanyConfig: CompanyConfig = {
     timezone: 'America/New_York',
     dateFormat: 'MM/DD/YYYY',
     currency: 'USD',
+    serviceType: 'Deli',
   },
   branding: {
     logoUrl: '',
