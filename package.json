@@ -48,8 +48,8 @@
     ],
     "extraFiles": [
       {
-        "from": "tecnicaSytemsKioskSettings.json",
-        "to": "tecnicaSytemsKioskSettings.json"
+        "from": "tecnicaSystemsKioskSettings.json",
+        "to": "tecnicaSystemsKioskSettings.json"
       }
     ],
     "win": {

@@ -9,7 +9,7 @@ let mainWindow: BrowserWindow | null = null;
 const SETTINGS_PATH = path.join(app.getPath('userData'), 'app-settings.json');
 
 // The config JSON file lives next to the .exe in production, or the project root in dev.
-const CONFIG_FILE_NAME = 'tecnicaSytemsKioskSettings.json';
+const CONFIG_FILE_NAME = 'tecnicaSystemsKioskSettings.json';
 const CONFIG_DIR_WIN = 'C:\\Tecnica_Systems\\Kiosk_Settings';
 const CONFIG_FILE_PATH = isDev
   ? path.join(process.cwd(), CONFIG_FILE_NAME)

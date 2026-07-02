@@ -60,7 +60,7 @@
     "metadata": {
       "version": "1.0.0",
       "createdAt": "2026-05-16T10:00:00Z",
-      "updatedAt": "2026-05-17T18:18:03.381Z"
+      "updatedAt": "2026-07-02T16:20:41.522Z"
     },
     "session": {
       "idleTimeoutSeconds": 300,
@@ -133,7 +133,7 @@
     "metadata": {
       "version": "1.0.0",
       "createdAt": "2026-05-16T10:00:00Z",
-      "updatedAt": "2026-05-17T16:23:51.059Z"
+      "updatedAt": "2026-07-02T16:20:55.767Z"
     },
     "active": true
   }

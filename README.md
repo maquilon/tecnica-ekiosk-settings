@@ -8,7 +8,7 @@ A desktop application built with Electron + React for managing multi-company kio
 
 ## Purpose
 
-The eKiosk Settings app replaces manual JSON editing with a form-driven interface. Each configuration file (`tecnicaSytemsKioskSettings.json`) stores an array of company profiles that control the look, feel, and behavior of deployed kiosks — including branding colors, typography, button styles, layout options, session timeouts, and localization.
+The eKiosk Settings app replaces manual JSON editing with a form-driven interface. Each configuration file (`tecnicaSystemsKioskSettings.json`) stores an array of company profiles that control the look, feel, and behavior of deployed kiosks — including branding colors, typography, button styles, layout options, session timeouts, and localization.
 
 ---
 
@@ -82,7 +82,7 @@ src/
     │       └── FormField.tsx
     └── assets/                # Static assets (logos, images)
 
-tecnicaSytemsKioskSettings.json   # Default config file (loaded automatically)
+tecnicaSystemsKioskSettings.json   # Default config file (loaded automatically)
 ```
 
 ---
@@ -168,7 +168,7 @@ The preload script exposes the following methods to the renderer via `window.ele
 
 ## Workflow
 
-1. **Launch** — The app loads `tecnicaSytemsKioskSettings.json` from the executable's directory (production) or project root (development).
+1. **Launch** — The app loads `tecnicaSystemsKioskSettings.json` from the executable's directory (production) or project root (development).
 2. **Select** — Pick a company from the sidebar or create a new one.
 3. **Edit** — Navigate between the eight configuration tabs and modify fields. Validation feedback appears in real-time.
 4. **Save** — Click *Save Configuration* or let autosave handle it. Changes write directly to the config file on disk.
@@ -215,7 +215,7 @@ After running the build process, the `release/` directory contains two distribut
 4. **Configuration file location**:
    - The app reads/writes the configuration at:
      ```
-     C:\Tecnica_Systems\Kiosk_Settings\tecnicaSytemsKioskSettings.json
+     C:\Tecnica_Systems\Kiosk_Settings\tecnicaSystemsKioskSettings.json
      ```
    - This directory is created automatically on first launch
    - Place your existing configuration file here if migrating from another machine
@@ -244,7 +244,7 @@ After running the build process, the `release/` directory contains two distribut
 
 2. **File permissions**: Ensure the service account or user running the app has read/write access to:
    ```
-   C:\Tecnica_Systems\Kiosk_Settings\tecnicaSytemsKioskSettings.json
+   C:\Tecnica_Systems\Kiosk_Settings\tecnicaSystemsKioskSettings.json
    ```
 
 3. **Auto-start (optional)**: To launch on server boot, create a Scheduled Task:
