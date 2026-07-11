@@ -12,8 +12,8 @@ const FONT_OPTIONS = [
 ];
 
 export default function TypographyTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, updateSection, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   const { register, control, watch, formState: { errors }, reset } = useForm<Typography>({
@@ -29,7 +29,7 @@ export default function TypographyTab() {
   const values = watch();
   useEffect(() => {
     if (selected) {
-      updateCompany(selected.company.id, 'typography', values);
+      updateSection('typography', values);
     }
   }, [JSON.stringify(values)]);
 

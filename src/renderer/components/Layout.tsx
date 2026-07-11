@@ -1,8 +1,8 @@
 import { useEffect, useRef, useCallback } from 'react';
 import toast from 'react-hot-toast';
 import { useConfigStore } from '../store/useConfigStore';
-import Sidebar from './Sidebar';
 import CompanyTab from './tabs/CompanyTab';
+import SplashPageTab from './tabs/SplashPageTab';
 import BrandingTab from './tabs/BrandingTab';
 import ButtonsTab from './tabs/ButtonsTab';
 import TypographyTab from './tabs/TypographyTab';
@@ -11,13 +11,14 @@ import SessionTab from './tabs/SessionTab';
 import LocalizationTab from './tabs/LocalizationTab';
 import MetadataTab from './tabs/MetadataTab';
 import {
-  Building2, Palette, SquareMousePointer, Type, LayoutDashboard, Timer, Globe, Info,
+  Building2, Image, Palette, SquareMousePointer, Type, LayoutDashboard, Timer, Globe, Info,
   Sun, Moon, Save,
 } from 'lucide-react';
 import { TabId } from '../types/config';
 
 const TABS: { id: TabId; label: string; icon: typeof Building2 }[] = [
   { id: 'company', label: 'Company', icon: Building2 },
+  { id: 'splashPage', label: 'Splash Page', icon: Image },
   { id: 'branding', label: 'Branding', icon: Palette },
   { id: 'buttons', label: 'Buttons', icon: SquareMousePointer },
   { id: 'typography', label: 'Typography', icon: Type },
@@ -30,14 +31,14 @@ const TABS: { id: TabId; label: string; icon: typeof Building2 }[] = [
 export default function Layout() {
   const {
     activeTab, setActiveTab, theme, setTheme,
-    getSelectedCompany, isDirty, setIsDirty, currentFilePath,
+    getConfig, isDirty, setIsDirty, currentFilePath,
     exportToJson,
-    companies,
+    config,
   } = useConfigStore();
 
   const autosaveTimer = useRef<ReturnType<typeof setTimeout>>();
   const d = theme === 'dark';
-  const selected = getSelectedCompany();
+  const activeConfig = getConfig();
 
   const handleSave = useCallback(async () => {
     try {
@@ -74,19 +75,19 @@ export default function Layout() {
       }, 5000);
     }
     return () => { if (autosaveTimer.current) clearTimeout(autosaveTimer.current); };
-  }, [isDirty, currentFilePath, companies]);
+  }, [isDirty, currentFilePath, config]);
 
   const renderTabContent = () => {
-    if (!selected) {
+    if (!activeConfig) {
       return (
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <Building2 className={`w-16 h-16 mx-auto mb-4 ${d ? 'text-gray-700' : 'text-gray-300'}`} />
             <h2 className={`text-xl font-semibold mb-2 ${d ? 'text-gray-400' : 'text-gray-600'}`}>
-              No Company Selected
+              No Configuration Loaded
             </h2>
             <p className={`text-sm ${d ? 'text-gray-600' : 'text-gray-400'}`}>
-              Select a company from the sidebar or create a new one to get started.
+              The configuration file will load automatically on launch.
             </p>
           </div>
         </div>
@@ -94,6 +95,7 @@ export default function Layout() {
     }
     switch (activeTab) {
       case 'company': return <CompanyTab />;
+      case 'splashPage': return <SplashPageTab />;
       case 'branding': return <BrandingTab />;
       case 'buttons': return <ButtonsTab />;
       case 'typography': return <TypographyTab />;
@@ -138,13 +140,10 @@ export default function Layout() {
       </header>
 
       <div className="flex flex-1 overflow-hidden">
-        {/* Sidebar */}
-        <Sidebar />
-
         {/* Main Content */}
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Tab Bar */}
-          {selected && (
+          {activeConfig && (
             <div className={`flex items-center gap-1 px-4 py-2 border-b overflow-x-auto flex-shrink-0 ${
               d ? 'bg-[#0a0a0a] border-[#1c1c1c]' : 'bg-gray-50 border-gray-200'
             }`}>
@@ -177,7 +176,7 @@ export default function Layout() {
           </div>
 
           {/* Sticky Action Bar */}
-          {selected && (
+          {activeConfig && (
             <div className={`flex items-center justify-between px-6 py-3 border-t flex-shrink-0 ${
               d ? 'bg-[#0a0a0a] border-[#1c1c1c]' : 'bg-gray-50 border-gray-200'
             }`}>

@@ -7,8 +7,8 @@ import { NumberField } from '../ui/FormField';
 import ColorPicker from '../ui/ColorPicker';
 
 export default function ButtonsTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, updateSection, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   const { control, watch, formState: { errors }, reset } = useForm<Buttons>({
@@ -24,7 +24,7 @@ export default function ButtonsTab() {
   const values = watch();
   useEffect(() => {
     if (selected) {
-      updateCompany(selected.company.id, 'buttons', values);
+      updateSection('buttons', values);
     }
   }, [JSON.stringify(values)]);
 

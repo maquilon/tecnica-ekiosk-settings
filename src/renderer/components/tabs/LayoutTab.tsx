@@ -6,8 +6,8 @@ import { Layout as LayoutType, layoutSchema } from '../../types/config';
 import { SelectField, ToggleField, NumberField } from '../ui/FormField';
 
 export default function LayoutTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, updateSection, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   const { register, control, watch, formState: { errors }, reset } = useForm<LayoutType>({
@@ -23,7 +23,7 @@ export default function LayoutTab() {
   const values = watch();
   useEffect(() => {
     if (selected) {
-      updateCompany(selected.company.id, 'layout', values);
+      updateSection('layout', values);
     }
   }, [JSON.stringify(values)]);
 

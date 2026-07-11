@@ -2,21 +2,22 @@
 
 **Company Configuration Manager for Tecnica Systems**
 
-A desktop application built with Electron + React for managing multi-company kiosk configuration files. It provides a visual UI to create, edit, and maintain the JSON-based settings that drive the Tecnica Systems eKiosk platform.
+A desktop application built with Electron + React for managing a single kiosk configuration file. It provides a visual UI to create, edit, and maintain the JSON-based settings that drive the Tecnica Systems eKiosk platform.
 
 ---
 
 ## Purpose
 
-The eKiosk Settings app replaces manual JSON editing with a form-driven interface. Each configuration file (`tecnicaSystemsKioskSettings.json`) stores an array of company profiles that control the look, feel, and behavior of deployed kiosks — including branding colors, typography, button styles, layout options, session timeouts, and localization.
+The eKiosk Settings app replaces manual JSON editing with a form-driven interface. The configuration file (`tecnicaSystemsKioskSettings.json`) stores a single kiosk profile that controls the look, feel, and behavior of deployed kiosks — including company identity, splash page, branding colors, typography, button styles, layout options, session timeouts, and localization.
 
 ---
 
 ## Key Features
 
-- **Multi-company management** — Add, duplicate, delete, and toggle the active state of company profiles from a searchable sidebar. Only one company can be active at a time.
-- **Section-based editing** — Eight dedicated tabs cover every aspect of a company's configuration:
-  - **Company** — ID, name, display name, domain, support email, service type, timezone, date format, currency.
+- **Single configuration** — Edit one kiosk profile with automatic I/O and legacy migration from the old multi-company array format.
+- **Section-based editing** — Nine dedicated tabs cover every aspect of the configuration:
+  - **Company** — ID, name, display name, slogan, domain, support email, service types, timezone, date format, currency.
+  - **Splash Page** — Toggle the dark logo option for the splash screen.
   - **Branding** — Logo/favicon URLs plus a full color palette (14 color tokens) with inline color pickers.
   - **Buttons** — Primary/secondary button colors, border radius, font weight.
   - **Typography** — Font families, base font size, font scale.
@@ -64,10 +65,10 @@ src/
     │   └── useConfigStore.ts  # Zustand store — all app state & actions
     ├── components/
     │   ├── Layout.tsx         # Main layout — header, tab bar, action bar
-    │   ├── Sidebar.tsx        # Company list — search, sort, filter, CRUD
     │   ├── ThemePreview.tsx   # Live theme preview component
     │   ├── tabs/              # One tab component per config section
     │   │   ├── CompanyTab.tsx
+    │   │   ├── SplashPageTab.tsx
     │   │   ├── BrandingTab.tsx
     │   │   ├── ButtonsTab.tsx
     │   │   ├── TypographyTab.tsx
@@ -89,25 +90,38 @@ tecnicaSystemsKioskSettings.json   # Default config file (loaded automatically)
 
 ## Configuration File Format
 
-The configuration file is a JSON array where each element is a company profile:
+The configuration file is a single JSON object with the following structure:
 
 ```jsonc
-[
-  {
-    "company": { "id": "...", "name": "...", ... },
-    "branding": { "primaryColor": "#4285F4", ... },
-    "buttons": { ... },
-    "typography": { ... },
-    "layout": { ... },
-    "session": { "idleTimeoutSeconds": 300, "idleWarningSeconds": 60 },
-    "localization": { "defaultLanguage": "en", "supportedLanguages": ["en", "es"], "rtl": false },
-    "metadata": { "version": "1.0.0", "createdAt": "...", "updatedAt": "..." },
-    "active": true
-  }
-]
+{
+  "company": {
+    "id": "...",
+    "name": "...",
+    "displayName": "...",
+    "slogan": "...",
+    "domain": "...",
+    "supportEmail": "...",
+    "timezone": "...",
+    "dateFormat": "...",
+    "currency": "...",
+    "serviceType": [
+      { "key": "deli", "colorBase": "#3341cb" },
+      { "key": "coffee", "colorBase": "#eda123" }
+    ]
+  },
+  "splashPage": { "darkLogo": false },
+  "branding": { "primaryColor": "#4285F4", ... },
+  "buttons": { ... },
+  "typography": { ... },
+  "layout": { ... },
+  "session": { "idleTimeoutSeconds": 300, "idleWarningSeconds": 60 },
+  "localization": { "defaultLanguage": "en", "supportedLanguages": ["en", "es"], "rtl": false },
+  "metadata": { "version": "1.0.0", "createdAt": "...", "updatedAt": "..." },
+  "active": true
+}
 ```
 
-Only **one** company can be marked `active: true` at a time. The app enforces this constraint automatically.
+`serviceType` is an array of objects, each with a unique key and a hex color. `splashPage.darkLogo` controls the splash screen logo theme.
 
 ---
 
@@ -168,11 +182,10 @@ The preload script exposes the following methods to the renderer via `window.ele
 
 ## Workflow
 
-1. **Launch** — The app loads `tecnicaSystemsKioskSettings.json` from the executable's directory (production) or project root (development).
-2. **Select** — Pick a company from the sidebar or create a new one.
-3. **Edit** — Navigate between the eight configuration tabs and modify fields. Validation feedback appears in real-time.
-4. **Save** — Click *Save Configuration* or let autosave handle it. Changes write directly to the config file on disk.
-5. **Deploy** — The resulting JSON file is consumed by the eKiosk platform at runtime.
+1. **Launch** — The app loads `tecnicaSystemsKioskSettings.json` from the executable's directory (production) or project root (development). If the file is missing, a default single-profile configuration is loaded. Legacy multi-company arrays are automatically migrated to the new format.
+2. **Edit** — Navigate between the nine configuration tabs and modify fields. Validation feedback appears in real-time.
+3. **Save** — Click *Save Configuration* or let autosave handle it. Changes write directly to the config file on disk.
+4. **Deploy** — The resulting JSON file is consumed by the eKiosk platform at runtime.
 
 ---
 

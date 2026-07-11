@@ -18,8 +18,8 @@ const LANGUAGES = [
 ];
 
 export default function LocalizationTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, updateSection, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
   const [newLang, setNewLang] = useState('');
 
@@ -36,7 +36,7 @@ export default function LocalizationTab() {
   const values = watch();
   useEffect(() => {
     if (selected) {
-      updateCompany(selected.company.id, 'localization', values);
+      updateSection('localization', values);
     }
   }, [JSON.stringify(values)]);
 

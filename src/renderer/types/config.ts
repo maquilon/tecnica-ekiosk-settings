@@ -1,40 +1,59 @@
 import { z } from 'zod';
 
+export const hexColorSchema = z
+  .string()
+  .regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color');
+
+export const serviceTypeSchema = z.object({
+  key: z.string().min(1, 'Key is required').regex(/^[a-z0-9-]+$/i, 'Key must be alphanumeric or hyphenated'),
+  colorBase: hexColorSchema,
+});
+
+export const splashPageSchema = z.object({
+  darkLogo: z.boolean(),
+});
+
 export const companySchema = z.object({
   id: z.string().min(1, 'ID is required'),
   name: z.string().min(1, 'Name is required'),
   displayName: z.string().min(1, 'Display name is required'),
+  slogan: z.string().min(1, 'Slogan is required'),
   domain: z.string().min(1, 'Domain is required'),
   supportEmail: z.string().email('Must be a valid email'),
   timezone: z.string().min(1, 'Timezone is required'),
   dateFormat: z.string().min(1, 'Date format is required'),
   currency: z.string().min(1, 'Currency is required'),
-  serviceType: z.enum(['Deli', 'Food', 'Coffee'], { required_error: 'Service type is required' }),
+  serviceType: z
+    .array(serviceTypeSchema)
+    .min(1, 'At least one service type is required')
+    .refine((items) => new Set(items.map((i) => i.key)).size === items.length, {
+      message: 'Service type keys must be unique',
+    }),
 });
 
 export const brandingSchema = z.object({
   logoUrl: z.string().url('Must be a valid URL').or(z.literal('')),
   faviconUrl: z.string().url('Must be a valid URL').or(z.literal('')),
-  backgroundColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  surfaceColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  primaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  secondaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  accentColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  errorColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  warningColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  successColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  textPrimaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  textSecondaryColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  labelTextColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  borderColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
+  backgroundColor: hexColorSchema,
+  surfaceColor: hexColorSchema,
+  primaryColor: hexColorSchema,
+  secondaryColor: hexColorSchema,
+  accentColor: hexColorSchema,
+  errorColor: hexColorSchema,
+  warningColor: hexColorSchema,
+  successColor: hexColorSchema,
+  textPrimaryColor: hexColorSchema,
+  textSecondaryColor: hexColorSchema,
+  labelTextColor: hexColorSchema,
+  borderColor: hexColorSchema,
   shadowColor: z.string().min(1, 'Shadow color is required'),
 });
 
 export const buttonsSchema = z.object({
-  primaryBackground: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  primaryTextColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  secondaryBackground: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
-  secondaryTextColor: z.string().regex(/^#[0-9A-Fa-f]{6}$/, 'Must be a valid hex color'),
+  primaryBackground: hexColorSchema,
+  primaryTextColor: hexColorSchema,
+  secondaryBackground: hexColorSchema,
+  secondaryTextColor: hexColorSchema,
   borderRadius: z.number().min(0).max(50),
   fontWeight: z.number().min(100).max(900),
 });
@@ -71,8 +90,9 @@ export const metadataSchema = z.object({
   updatedAt: z.string(),
 });
 
-export const companyConfigSchema = z.object({
+export const kioskConfigSchema = z.object({
   company: companySchema,
+  splashPage: splashPageSchema,
   branding: brandingSchema,
   buttons: buttonsSchema,
   typography: typographySchema,
@@ -83,6 +103,33 @@ export const companyConfigSchema = z.object({
   active: z.boolean(),
 });
 
+// Legacy schemas used to migrate old multi-company array files.
+export const legacyCompanySchema = z.object({
+  id: z.string().min(1),
+  name: z.string().min(1),
+  displayName: z.string().min(1),
+  domain: z.string(),
+  supportEmail: z.string(),
+  timezone: z.string(),
+  dateFormat: z.string(),
+  currency: z.string(),
+  serviceType: z.enum(['Deli', 'Food', 'Coffee']),
+});
+
+export const legacyCompanyConfigSchema = z.object({
+  company: legacyCompanySchema,
+  branding: brandingSchema,
+  buttons: buttonsSchema,
+  typography: typographySchema,
+  layout: layoutSchema,
+  session: sessionSchema,
+  localization: localizationSchema,
+  metadata: metadataSchema,
+  active: z.boolean(),
+});
+
+export type ServiceType = z.infer<typeof serviceTypeSchema>;
+export type SplashPage = z.infer<typeof splashPageSchema>;
 export type Company = z.infer<typeof companySchema>;
 export type Branding = z.infer<typeof brandingSchema>;
 export type Buttons = z.infer<typeof buttonsSchema>;
@@ -91,10 +138,12 @@ export type Layout = z.infer<typeof layoutSchema>;
 export type Session = z.infer<typeof sessionSchema>;
 export type Localization = z.infer<typeof localizationSchema>;
 export type Metadata = z.infer<typeof metadataSchema>;
-export type CompanyConfig = z.infer<typeof companyConfigSchema>;
+export type KioskConfig = z.infer<typeof kioskConfigSchema>;
+export type LegacyCompanyConfig = z.infer<typeof legacyCompanyConfigSchema>;
 
 export type TabId =
   | 'company'
+  | 'splashPage'
   | 'branding'
   | 'buttons'
   | 'typography'
@@ -103,17 +152,25 @@ export type TabId =
   | 'localization'
   | 'metadata';
 
-export const defaultCompanyConfig: CompanyConfig = {
+export const defaultKioskConfig: KioskConfig = {
   company: {
-    id: '',
-    name: '',
-    displayName: '',
-    domain: '',
-    supportEmail: '',
+    id: '7e691896',
+    name: 'Tecnica Systems LLC',
+    displayName: 'Tecnica Systems JSON',
+    slogan: 'Smart eKiosk JSON',
+    domain: 'https://tecnicasystems.com',
+    supportEmail: 'support@tecnicasystems.com',
     timezone: 'America/New_York',
     dateFormat: 'MM/DD/YYYY',
     currency: 'USD',
-    serviceType: 'Deli',
+    serviceType: [
+      { key: 'deli', colorBase: '#3341cb' },
+      { key: 'coffee', colorBase: '#eda123' },
+      { key: 'restaurant', colorBase: '#1ea24d' },
+    ],
+  },
+  splashPage: {
+    darkLogo: false,
   },
   branding: {
     logoUrl: '',
@@ -169,3 +226,72 @@ export const defaultCompanyConfig: CompanyConfig = {
   },
   active: true,
 };
+
+const defaultLegacyServiceTypeColors: Record<string, string> = {
+  Deli: '#3341cb',
+  Food: '#1ea24d',
+  Coffee: '#eda123',
+};
+
+function defaultDomain(domain: string): string {
+  return domain?.trim() || 'https://tecnicasystems.com';
+}
+
+function defaultSupportEmail(email: string): string {
+  const trimmed = email?.trim();
+  if (trimmed && trimmed.includes('@')) return trimmed;
+  return 'support@tecnicasystems.com';
+}
+
+function legacyServiceTypeToArray(
+  legacyServiceType: string,
+): ServiceType[] {
+  const key = legacyServiceType.toLowerCase();
+  return [
+    {
+      key,
+      colorBase:
+        defaultLegacyServiceTypeColors[legacyServiceType] || '#3341cb',
+    },
+  ];
+}
+
+export function migrateLegacyArray(
+  legacy: LegacyCompanyConfig[],
+): KioskConfig {
+  const active = legacy.find((c) => c.active) || legacy[0];
+  if (!active) {
+    return { ...defaultKioskConfig };
+  }
+
+  const now = new Date().toISOString();
+  const companyName = active.company.name?.trim() || 'Tecnica Systems LLC';
+
+  return {
+    company: {
+      id: active.company.id?.trim() || '7e691896',
+      name: companyName,
+      displayName: active.company.displayName?.trim() || companyName,
+      slogan: active.company.displayName?.trim() || 'Smart eKiosk JSON',
+      domain: defaultDomain(active.company.domain),
+      supportEmail: defaultSupportEmail(active.company.supportEmail),
+      timezone: active.company.timezone || 'America/New_York',
+      dateFormat: active.company.dateFormat || 'MM/DD/YYYY',
+      currency: active.company.currency || 'USD',
+      serviceType: legacyServiceTypeToArray(active.company.serviceType || 'Deli'),
+    },
+    splashPage: { darkLogo: false },
+    branding: active.branding,
+    buttons: active.buttons,
+    typography: active.typography,
+    layout: active.layout,
+    session: active.session,
+    localization: active.localization,
+    metadata: {
+      ...active.metadata,
+      version: '1.0.0',
+      updatedAt: now,
+    },
+    active: true,
+  };
+}

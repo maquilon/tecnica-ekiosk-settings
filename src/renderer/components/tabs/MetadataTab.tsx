@@ -7,8 +7,8 @@ import { InputField } from '../ui/FormField';
 import { Clock } from 'lucide-react';
 
 export default function MetadataTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, updateSection, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   const { register, watch, formState: { errors }, reset } = useForm<Metadata>({
@@ -24,7 +24,7 @@ export default function MetadataTab() {
   const values = watch();
   useEffect(() => {
     if (selected) {
-      updateCompany(selected.company.id, 'metadata', values);
+      updateSection('metadata', values);
     }
   }, [JSON.stringify(values)]);
 
@@ -78,9 +78,9 @@ export default function MetadataTab() {
       <div className={`card ${d ? 'card-dark' : 'card-light'} p-6 mt-4`}>
         <h3 className={`section-title ${d ? 'section-title-dark' : 'section-title-light'}`}>Status</h3>
         <div className="flex items-center gap-3">
-          <span className={`w-2.5 h-2.5 rounded-full ${selected.active ? 'bg-brand-success' : 'bg-gray-500'}`} />
+          <span className={`w-2.5 h-2.5 rounded-full ${config.active ? 'bg-brand-success' : 'bg-gray-500'}`} />
           <span className={`text-sm font-medium ${d ? 'text-gray-200' : 'text-gray-700'}`}>
-            {selected.active ? 'Active' : 'Inactive'}
+            {config.active ? 'Active' : 'Inactive'}
           </span>
         </div>
       </div>

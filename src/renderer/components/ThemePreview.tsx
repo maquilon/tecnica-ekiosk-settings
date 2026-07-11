@@ -2,8 +2,8 @@ import { useConfigStore } from '../store/useConfigStore';
 import { Bell, Home, Settings, User, Search, ChevronRight } from 'lucide-react';
 
 export default function ThemePreview() {
-  const { getSelectedCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   if (!selected) return null;

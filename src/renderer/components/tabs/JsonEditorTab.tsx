@@ -2,12 +2,12 @@ import { useState, useEffect, useCallback } from 'react';
 import Editor from '@monaco-editor/react';
 import toast from 'react-hot-toast';
 import { useConfigStore } from '../../store/useConfigStore';
-import { companyConfigSchema } from '../../types/config';
+import { kioskConfigSchema } from '../../types/config';
 import { CheckCircle2, XCircle, Copy, ClipboardPaste, Wand2 } from 'lucide-react';
 
 export default function JsonEditorTab() {
-  const { getSelectedCompany, updateFullCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, setConfig, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   const [jsonText, setJsonText] = useState('');
@@ -25,7 +25,7 @@ export default function JsonEditorTab() {
   const validate = useCallback((text: string) => {
     try {
       const parsed = JSON.parse(text);
-      const result = companyConfigSchema.safeParse(parsed);
+      const result = kioskConfigSchema.safeParse(parsed);
       if (result.success) {
         setValidationErrors([]);
         setIsValid(true);
@@ -56,7 +56,7 @@ export default function JsonEditorTab() {
     if (validate(jsonText)) {
       try {
         const parsed = JSON.parse(jsonText);
-        updateFullCompany(selected.company.id, parsed);
+        setConfig(parsed);
         toast.success('Changes applied');
       } catch {
         toast.error('Invalid JSON');

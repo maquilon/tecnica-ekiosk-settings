@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useConfigStore } from './store/useConfigStore';
+import { defaultKioskConfig } from './types/config';
 import Layout from './components/Layout';
 
 export default function App() {
-  const { theme, setTheme, setCompanies, setCurrentFilePath, loadFromJson } =
-    useConfigStore();
+  const { theme, setTheme, setCurrentFilePath, loadFromJson } = useConfigStore();
 
   useEffect(() => {
     const root = document.documentElement;
@@ -31,6 +31,8 @@ export default function App() {
         const content = await window.electronAPI.loadConfig();
         if (content) {
           loadFromJson(content);
+        } else {
+          loadFromJson(JSON.stringify(defaultKioskConfig));
         }
       } catch {}
     })();

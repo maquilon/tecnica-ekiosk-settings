@@ -6,8 +6,8 @@ import { Session, sessionSchema } from '../../types/config';
 import { NumberField } from '../ui/FormField';
 
 export default function SessionTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, updateSection, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   const { control, watch, formState: { errors }, reset } = useForm<Session>({
@@ -23,7 +23,7 @@ export default function SessionTab() {
   const values = watch();
   useEffect(() => {
     if (selected) {
-      updateCompany(selected.company.id, 'session', values);
+      updateSection('session', values);
     }
   }, [JSON.stringify(values)]);
 

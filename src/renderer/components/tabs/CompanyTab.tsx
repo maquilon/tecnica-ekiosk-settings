@@ -1,9 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useConfigStore } from '../../store/useConfigStore';
-import { Company, companySchema } from '../../types/config';
+import { Company, companySchema, ServiceType } from '../../types/config';
 import { InputField, SelectField } from '../ui/FormField';
+import ColorPicker from '../ui/ColorPicker';
+import { Plus, Trash2 } from 'lucide-react';
 
 const TIMEZONES = [
   'America/New_York', 'America/Chicago', 'America/Denver', 'America/Los_Angeles',
@@ -14,31 +16,40 @@ const TIMEZONES = [
 
 const DATE_FORMATS = ['MM/DD/YYYY', 'DD/MM/YYYY', 'YYYY-MM-DD', 'DD-MMM-YYYY'];
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD', 'BRL', 'INR', 'CNY', 'MXN'];
-const SERVICE_TYPES = ['Deli', 'Food', 'Coffee'];
 
 export default function CompanyTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const {
+    config, updateCompany, addServiceType, removeServiceType, updateServiceType, theme,
+  } = useConfigStore();
   const d = theme === 'dark';
+
+  const [newKey, setNewKey] = useState('');
+  const [newColor, setNewColor] = useState('#3341cb');
 
   const { register, watch, formState: { errors }, reset } = useForm<Company>({
     resolver: zodResolver(companySchema),
-    defaultValues: selected?.company,
+    defaultValues: config?.company,
     mode: 'onChange',
   });
 
   useEffect(() => {
-    if (selected) reset(selected.company);
-  }, [selected?.company.id]);
+    if (config) reset(config.company);
+  }, [config?.company.id]);
 
   const values = watch();
   useEffect(() => {
-    if (selected && values.id) {
-      updateCompany(selected.company.id, 'company', values);
+    if (config && values.id) {
+      updateCompany({ ...values, serviceType: config.company.serviceType });
     }
   }, [JSON.stringify(values)]);
 
-  if (!selected) return null;
+  if (!config) return null;
+
+  const handleAdd = () => {
+    if (!newKey.trim()) return;
+    addServiceType({ key: newKey.trim().toLowerCase(), colorBase: newColor });
+    setNewKey('');
+  };
 
   return (
     <div className="p-6 max-w-3xl mx-auto animate-slide-up">
@@ -60,16 +71,70 @@ export default function CompanyTab() {
           <InputField label="Name" error={errors.name?.message} {...register('name')} />
         </div>
         <InputField label="Display Name" error={errors.displayName?.message} {...register('displayName')} />
+        <InputField label="Slogan" error={errors.slogan?.message} {...register('slogan')} placeholder="Smart eKiosk" />
         <div className="grid grid-cols-2 gap-4">
           <InputField label="Domain" error={errors.domain?.message} {...register('domain')} placeholder="example.com" />
           <InputField label="Support Email" error={errors.supportEmail?.message} {...register('supportEmail')} type="email" placeholder="support@example.com" />
         </div>
-        <SelectField
-          label="Service Type"
-          error={errors.serviceType?.message}
-          options={SERVICE_TYPES.map((s) => ({ value: s, label: s }))}
-          {...register('serviceType')}
-        />
+      </div>
+
+      <div className={`card ${d ? 'card-dark' : 'card-light'} p-6 space-y-5 mt-4`}>
+        <h3 className={`section-title ${d ? 'section-title-dark' : 'section-title-light'}`}>
+          Service Types
+        </h3>
+        <div className="space-y-3">
+          {config.company.serviceType.map((st) => (
+            <div key={st.key} className="flex items-center gap-3">
+              <input
+                type="text"
+                value={st.key}
+                onChange={(e) => updateServiceType(st.key, { key: e.target.value })}
+                className={`input-base ${d ? 'input-dark' : 'input-light'} flex-1 text-xs`}
+              />
+              <div className="w-36">
+                <ColorPicker
+                  label=""
+                  value={st.colorBase}
+                  onChange={(color) => updateServiceType(st.key, { colorBase: color })}
+                />
+              </div>
+              <button
+                onClick={() => removeServiceType(st.key)}
+                disabled={config.company.serviceType.length <= 1}
+                className="p-1.5 rounded text-brand-error hover:bg-brand-error/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                title="Remove service type"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+          <div className="flex items-center gap-3 pt-2 border-t border-dashed border-gray-700/30">
+            <input
+              type="text"
+              placeholder="New service type key"
+              value={newKey}
+              onChange={(e) => setNewKey(e.target.value)}
+              className={`input-base ${d ? 'input-dark' : 'input-light'} flex-1 text-xs`}
+            />
+            <div className="w-36">
+              <ColorPicker
+                label=""
+                value={newColor}
+                onChange={setNewColor}
+              />
+            </div>
+            <button
+              onClick={handleAdd}
+              disabled={!newKey.trim()}
+              className="btn btn-primary !px-3 text-xs"
+            >
+              <Plus className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          {errors.serviceType?.message && (
+            <p className="text-xs text-brand-error">{errors.serviceType.message}</p>
+          )}
+        </div>
       </div>
 
       <div className={`card ${d ? 'card-dark' : 'card-light'} p-6 space-y-5 mt-4`}>

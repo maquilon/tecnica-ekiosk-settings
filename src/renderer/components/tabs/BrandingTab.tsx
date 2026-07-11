@@ -7,8 +7,8 @@ import { InputField } from '../ui/FormField';
 import ColorPicker from '../ui/ColorPicker';
 
 export default function BrandingTab() {
-  const { getSelectedCompany, updateCompany, theme } = useConfigStore();
-  const selected = getSelectedCompany();
+  const { config, updateSection, theme } = useConfigStore();
+  const selected = config;
   const d = theme === 'dark';
 
   const { register, control, watch, formState: { errors }, reset } = useForm<Branding>({
@@ -24,7 +24,7 @@ export default function BrandingTab() {
   const values = watch();
   useEffect(() => {
     if (selected) {
-      updateCompany(selected.company.id, 'branding', values);
+      updateSection('branding', values);
     }
   }, [JSON.stringify(values)]);
 
