@@ -7,6 +7,7 @@ export const hexColorSchema = z
 export const serviceTypeSchema = z.object({
   key: z.string().min(1, 'Key is required').regex(/^[a-z0-9-]+$/i, 'Key must be alphanumeric or hyphenated'),
   colorBase: hexColorSchema,
+  active: z.boolean().default(true),
 });
 
 export const splashPageSchema = z.object({
@@ -164,9 +165,9 @@ export const defaultKioskConfig: KioskConfig = {
     dateFormat: 'MM/DD/YYYY',
     currency: 'USD',
     serviceType: [
-      { key: 'deli', colorBase: '#3341cb' },
-      { key: 'coffee', colorBase: '#eda123' },
-      { key: 'restaurant', colorBase: '#1ea24d' },
+      { key: 'deli', colorBase: '#3341cb', active: true },
+      { key: 'coffee', colorBase: '#eda123', active: true },
+      { key: 'restaurant', colorBase: '#1ea24d', active: true },
     ],
   },
   splashPage: {
@@ -252,6 +253,7 @@ function legacyServiceTypeToArray(
       key,
       colorBase:
         defaultLegacyServiceTypeColors[legacyServiceType] || '#3341cb',
+      active: true,
     },
   ];
 }

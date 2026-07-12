@@ -47,7 +47,7 @@ export default function CompanyTab() {
 
   const handleAdd = () => {
     if (!newKey.trim()) return;
-    addServiceType({ key: newKey.trim().toLowerCase(), colorBase: newColor });
+    addServiceType({ key: newKey.trim().toLowerCase(), colorBase: newColor, active: true });
     setNewKey('');
   };
 
@@ -98,6 +98,15 @@ export default function CompanyTab() {
                   onChange={(color) => updateServiceType(st.key, { colorBase: color })}
                 />
               </div>
+              <label className={`flex items-center gap-1.5 text-xs cursor-pointer ${d ? 'text-gray-400' : 'text-gray-600'}`}>
+                <input
+                  type="checkbox"
+                  checked={st.active}
+                  onChange={(e) => updateServiceType(st.key, { active: e.target.checked })}
+                  className="w-4 h-4 rounded cursor-pointer"
+                />
+                Active
+              </label>
               <button
                 onClick={() => removeServiceType(st.key)}
                 disabled={config.company.serviceType.length <= 1}

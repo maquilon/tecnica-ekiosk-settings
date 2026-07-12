@@ -1,9 +1,9 @@
 {
   "company": {
     "id": "7e691896",
-    "name": "New Company 7e691896",
-    "displayName": "New Company 7e691896",
-    "slogan": "New Company 7e691896",
+    "name": "Tecnica Systems LLC",
+    "displayName": "Tecnica Systems JSON",
+    "slogan": "Smart eKiosk JSON",
     "domain": "https://tecnicasystems.com",
     "supportEmail": "support@tecnicasystems.com",
     "timezone": "America/New_York",
@@ -12,11 +12,18 @@
     "serviceType": [
       {
         "key": "deli",
-        "colorBase": "#3341cb"
+        "colorBase": "#3341cb",
+        "active": true
       },
       {
-        "key": "testing",
-        "colorBase": "#3341cb"
+        "key": "coffee",
+        "colorBase": "#eda123",
+        "active": false
+      },
+      {
+        "key": "restaurant",
+        "colorBase": "#1ea24d",
+        "active": true
       }
     ]
   },
@@ -75,8 +82,8 @@
   },
   "metadata": {
     "version": "1.0.0",
-    "createdAt": "2026-07-10T12:26:43.633Z",
-    "updatedAt": "2026-07-11T19:33:47.948Z"
+    "createdAt": "2026-07-11T21:46:46.294Z",
+    "updatedAt": "2026-07-11T21:47:06.276Z"
   },
   "active": true
 }
