@@ -10,6 +10,7 @@ const electronAPI = {
   getConfigPath: () => ipcRenderer.invoke('config:getPath'),
   loadConfig: () => ipcRenderer.invoke('config:load'),
   saveConfig: (data: string) => ipcRenderer.invoke('config:save', data),
+  selectConfigPath: () => ipcRenderer.invoke('config:selectPath'),
 };
 
 contextBridge.exposeInMainWorld('electronAPI', electronAPI);

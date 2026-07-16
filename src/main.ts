@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, dialog } from 'electron';
 import * as path from 'path';
 import * as fs from 'fs';
 
@@ -10,22 +10,34 @@ const SETTINGS_PATH = path.join(app.getPath('userData'), 'app-settings.json');
 
 // The config JSON file lives next to the .exe in production, or the project root in dev.
 const CONFIG_FILE_NAME = 'tecnicaSystemsKioskSettings.json';
-const CONFIG_DIR_WIN = 'C:\\Tecnica_Systems\\Kiosk_Settings';
-const CONFIG_FILE_PATH = isDev
-  ? path.join(process.cwd(), CONFIG_FILE_NAME)
-  : process.platform === 'win32'
-    ? path.join(CONFIG_DIR_WIN, CONFIG_FILE_NAME)
-    : path.join(path.dirname(process.execPath), CONFIG_FILE_NAME);
 
-// Ensure the config directory exists in production on Windows
-if (!isDev && process.platform === 'win32') {
-  fs.mkdirSync(CONFIG_DIR_WIN, { recursive: true });
+// Get the default config path based on platform and execution context
+function getDefaultConfigPath(): string {
+  if (isDev) {
+    return path.join(process.cwd(), CONFIG_FILE_NAME);
+  }
+  
+  if (process.platform === 'win32') {
+    return path.join('c:\\kiosk001\\Office\\Htm\\Tecnica-eKiosk', CONFIG_FILE_NAME);
+  }
+  
+  return path.join(path.dirname(process.execPath), CONFIG_FILE_NAME);
+}
+
+// Get the config path, checking stored user path first, then default
+function getConfigPath(): string {
+  const settings = loadSettings();
+  if (settings.configFilePath) {
+    return settings.configFilePath;
+  }
+  return getDefaultConfigPath();
 }
 
 interface AppSettings {
   lastFilePath?: string;
   windowBounds?: { width: number; height: number; x?: number; y?: number };
   theme?: 'dark' | 'light';
+  configFilePath?: string;
 }
 
 function loadSettings(): AppSettings {
@@ -115,17 +127,36 @@ ipcMain.handle('settings:set', async (_event, settings: Partial<AppSettings>) =>
 
 // Returns the resolved path to the config file
 ipcMain.handle('config:getPath', async () => {
-  return CONFIG_FILE_PATH;
+  return getConfigPath();
 });
 
 // Auto-load the config file at the known path
 ipcMain.handle('config:load', async () => {
-  if (!fs.existsSync(CONFIG_FILE_PATH)) return null;
-  return fs.readFileSync(CONFIG_FILE_PATH, 'utf-8');
+  const configPath = getConfigPath();
+  if (!fs.existsSync(configPath)) return null;
+  return fs.readFileSync(configPath, 'utf-8');
 });
 
 // Save directly to the config file
 ipcMain.handle('config:save', async (_event, data: string) => {
-  fs.writeFileSync(CONFIG_FILE_PATH, data, 'utf-8');
+  const configPath = getConfigPath();
+  fs.writeFileSync(configPath, data, 'utf-8');
   return true;
+});
+
+// Open file picker to select config file path
+ipcMain.handle('config:selectPath', async () => {
+  const { canceled, filePaths } = await dialog.showOpenDialog({
+    title: 'Select Config File',
+    filters: [{ name: 'JSON', extensions: ['json'] }],
+    properties: ['openFile']
+  });
+  
+  if (canceled || !filePaths.length) return null;
+  
+  const selectedPath = filePaths[0];
+  const settings = loadSettings();
+  saveSettings({ ...settings, configFilePath: selectedPath });
+  
+  return selectedPath;
 });

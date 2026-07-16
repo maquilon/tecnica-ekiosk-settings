@@ -47,7 +47,15 @@ export default function CompanyTab() {
 
   const handleAdd = () => {
     if (!newKey.trim()) return;
-    addServiceType({ key: newKey.trim().toLowerCase(), colorBase: newColor, active: true });
+    const langs = config.localization.supportedLanguages;
+    const translations = Object.fromEntries(langs.map((lang) => [lang, '']));
+    addServiceType({
+      key: newKey.trim().toLowerCase(),
+      title: { ...translations },
+      subTitle: { ...translations },
+      colorBase: newColor,
+      active: true,
+    });
     setNewKey('');
   };
 
@@ -84,37 +92,63 @@ export default function CompanyTab() {
         </h3>
         <div className="space-y-3">
           {config.company.serviceType.map((st) => (
-            <div key={st.key} className="flex items-center gap-3">
-              <input
-                type="text"
-                value={st.key}
-                onChange={(e) => updateServiceType(st.key, { key: e.target.value })}
-                className={`input-base ${d ? 'input-dark' : 'input-light'} flex-1 text-xs`}
-              />
-              <div className="w-36">
-                <ColorPicker
-                  label=""
-                  value={st.colorBase}
-                  onChange={(color) => updateServiceType(st.key, { colorBase: color })}
-                />
-              </div>
-              <label className={`flex items-center gap-1.5 text-xs cursor-pointer ${d ? 'text-gray-400' : 'text-gray-600'}`}>
+            <div key={st.key} className={`p-3 rounded-lg border border-dashed ${d ? 'border-gray-700/30 bg-white/5' : 'border-gray-200 bg-gray-50/50'} space-y-3`}>
+              <div className="flex items-center gap-3">
                 <input
-                  type="checkbox"
-                  checked={st.active}
-                  onChange={(e) => updateServiceType(st.key, { active: e.target.checked })}
-                  className="w-4 h-4 rounded cursor-pointer"
+                  type="text"
+                  value={st.key}
+                  onChange={(e) => updateServiceType(st.key, { key: e.target.value })}
+                  className={`input-base ${d ? 'input-dark' : 'input-light'} flex-1 text-xs`}
                 />
-                Active
-              </label>
-              <button
-                onClick={() => removeServiceType(st.key)}
-                disabled={config.company.serviceType.length <= 1}
-                className="p-1.5 rounded text-brand-error hover:bg-brand-error/10 disabled:opacity-30 disabled:cursor-not-allowed"
-                title="Remove service type"
-              >
-                <Trash2 className="w-4 h-4" />
-              </button>
+                <div className="w-36">
+                  <ColorPicker
+                    label=""
+                    value={st.colorBase}
+                    onChange={(color) => updateServiceType(st.key, { colorBase: color })}
+                  />
+                </div>
+                <label className={`flex items-center gap-1.5 text-xs cursor-pointer ${d ? 'text-gray-400' : 'text-gray-600'}`}>
+                  <input
+                    type="checkbox"
+                    checked={st.active}
+                    onChange={(e) => updateServiceType(st.key, { active: e.target.checked })}
+                    className="w-4 h-4 rounded cursor-pointer"
+                  />
+                  Active
+                </label>
+                <button
+                  onClick={() => removeServiceType(st.key)}
+                  disabled={config.company.serviceType.length <= 1}
+                  className="p-1.5 rounded text-brand-error hover:bg-brand-error/10 disabled:opacity-30 disabled:cursor-not-allowed"
+                  title="Remove service type"
+                >
+                  <Trash2 className="w-4 h-4" />
+                </button>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                {config.localization.supportedLanguages.map((lang) => (
+                  <div key={lang} className="space-y-1">
+                    <label className={`block text-[10px] uppercase tracking-wide ${d ? 'text-gray-500' : 'text-gray-500'}`}>
+                      {lang} title
+                    </label>
+                    <input
+                      type="text"
+                      value={st.title[lang] || ''}
+                      onChange={(e) => updateServiceType(st.key, { title: { ...st.title, [lang]: e.target.value } })}
+                      className={`input-base ${d ? 'input-dark' : 'input-light'} w-full text-xs`}
+                    />
+                    <label className={`block text-[10px] uppercase tracking-wide ${d ? 'text-gray-500' : 'text-gray-500'}`}>
+                      {lang} subtitle
+                    </label>
+                    <input
+                      type="text"
+                      value={st.subTitle[lang] || ''}
+                      onChange={(e) => updateServiceType(st.key, { subTitle: { ...st.subTitle, [lang]: e.target.value } })}
+                      className={`input-base ${d ? 'input-dark' : 'input-light'} w-full text-xs`}
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
           <div className="flex items-center gap-3 pt-2 border-t border-dashed border-gray-700/30">

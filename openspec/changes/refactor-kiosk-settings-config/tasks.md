@@ -51,3 +51,11 @@
 - [ ] 6.4 Test adding and removing service type entries in the UI
 - [ ] 6.5 Toggle `splashPage.darkLogo` and confirm persistence in the exported JSON
 - [ ] 6.6 Run `npm run dev` and verify the UI renders with the single-config layout
+
+## 7. Localized Service Type Labels
+
+- [x] 7.1 Update `serviceTypeSchema` to include `title` and `subTitle` records
+- [x] 7.2 Update `defaultKioskConfig` service types with `title` / `subTitle` and `defaultLanguage: "es"`
+- [x] 7.3 Update `legacyServiceTypeToArray` to backfill `title` / `subTitle` per supported language
+- [x] 7.4 Update `CompanyTab.tsx` to edit `title` and `subTitle` for each supported language
+- [x] 7.5 Verify `tecnicaSystemsKioskSettings.json` and schema pass validation

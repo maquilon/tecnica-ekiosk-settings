@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useConfigStore } from './store/useConfigStore';
 import { defaultKioskConfig } from './types/config';
 import Layout from './components/Layout';
+import ConfigFileDialog from './components/ui/ConfigFileDialog';
 
 export default function App() {
   const { theme, setTheme, setCurrentFilePath, loadFromJson } = useConfigStore();
+  const [showConfigDialog, setShowConfigDialog] = useState(false);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -17,26 +19,51 @@ export default function App() {
     }
   }, [theme]);
 
+  const loadConfig = async () => {
+    try {
+      if (!window.electronAPI) return;
+      const settings = await window.electronAPI.getSettings();
+      if (settings?.theme) setTheme(settings.theme);
+
+      // Auto-load the config file from the same folder as the .exe
+      const configPath = await window.electronAPI.getConfigPath();
+      if (configPath) setCurrentFilePath(configPath);
+
+      const content = await window.electronAPI.loadConfig();
+      if (content) {
+        loadFromJson(content);
+      } else {
+        setShowConfigDialog(true);
+      }
+    } catch {}
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        if (!window.electronAPI) return;
-        const settings = await window.electronAPI.getSettings();
-        if (settings?.theme) setTheme(settings.theme);
+    loadConfig();
+  }, []);
 
-        // Auto-load the config file from the same folder as the .exe
-        const configPath = await window.electronAPI.getConfigPath();
-        if (configPath) setCurrentFilePath(configPath);
-
+  const handleFileSelect = async () => {
+    try {
+      if (!window.electronAPI) return;
+      const selectedPath = await window.electronAPI.selectConfigPath();
+      if (selectedPath) {
+        setCurrentFilePath(selectedPath);
+        setShowConfigDialog(false);
+        // Retry loading config after selection
         const content = await window.electronAPI.loadConfig();
         if (content) {
           loadFromJson(content);
         } else {
           loadFromJson(JSON.stringify(defaultKioskConfig));
         }
-      } catch {}
-    })();
-  }, []);
+      }
+    } catch {}
+  };
+
+  const handleDialogCancel = () => {
+    setShowConfigDialog(false);
+    loadFromJson(JSON.stringify(defaultKioskConfig));
+  };
 
   useEffect(() => {
     if (window.electronAPI) {
@@ -44,5 +71,14 @@ export default function App() {
     }
   }, [theme]);
 
-  return <Layout />;
+  return (
+    <>
+      <Layout />
+      <ConfigFileDialog
+        open={showConfigDialog}
+        onFileSelect={handleFileSelect}
+        onCancel={handleDialogCancel}
+      />
+    </>
+  );
 }

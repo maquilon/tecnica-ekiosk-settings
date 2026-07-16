@@ -41,3 +41,24 @@ The `colorBase` value SHALL be a valid six-digit hex color prefixed with `#`.
 #### Scenario: Invalid color rejected
 - **WHEN** a user enters a color that does not match `#RRGGBB`
 - **THEN** the application displays a validation error and prevents the change
+
+### Requirement: Service type labels are localized
+Each service type SHALL contain `title` and `subTitle` objects keyed by supported language code.
+
+#### Scenario: Service type with localized labels
+- **WHEN** the configuration contains a service type with `{ "title": { "en": "...", "es": "..." }, "subTitle": { "en": "...", "es": "..." } }`
+- **THEN** the schema validates the input and the UI allows editing each language-specific title and subtitle
+
+### Requirement: Default title and subtitle are provided when adding a service type
+When a new service type is added, the application SHALL initialize `title` and `subTitle` records for each supported language.
+
+#### Scenario: Add service type with translations
+- **WHEN** the user adds a service type
+- **THEN** the new entry contains empty `title` and `subTitle` records for every supported language
+
+### Requirement: Legacy migration backfills title and subtitle
+When migrating a legacy service type string, the application SHALL create `title` and `subTitle` records using the supported languages from the legacy config.
+
+#### Scenario: Legacy migration with labels
+- **WHEN** a legacy service type value is migrated
+- **THEN** the resulting service type contains `title` entries for each supported language and empty `subTitle` entries for each supported language

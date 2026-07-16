@@ -7,11 +7,13 @@ interface ElectronAPI {
     lastFilePath?: string;
     windowBounds?: { width: number; height: number; x?: number; y?: number };
     theme?: 'dark' | 'light';
+    configFilePath?: string;
   }>;
   setSettings: (settings: Record<string, unknown>) => Promise<boolean>;
   getConfigPath: () => Promise<string>;
   loadConfig: () => Promise<string | null>;
   saveConfig: (data: string) => Promise<boolean>;
+  selectConfigPath: () => Promise<string | null>;
 }
 
 declare global {

@@ -6,6 +6,8 @@ export const hexColorSchema = z
 
 export const serviceTypeSchema = z.object({
   key: z.string().min(1, 'Key is required').regex(/^[a-z0-9-]+$/i, 'Key must be alphanumeric or hyphenated'),
+  title: z.record(z.string()).default({}),
+  subTitle: z.record(z.string()).default({}),
   colorBase: hexColorSchema,
   active: z.boolean().default(true),
 });
@@ -165,9 +167,36 @@ export const defaultKioskConfig: KioskConfig = {
     dateFormat: 'MM/DD/YYYY',
     currency: 'USD',
     serviceType: [
-      { key: 'deli', colorBase: '#3341cb', active: true },
-      { key: 'coffee', colorBase: '#eda123', active: true },
-      { key: 'restaurant', colorBase: '#1ea24d', active: true },
+      {
+        key: 'deli',
+        title: { en: 'Deli JSON', es: 'Deli JSON' },
+        subTitle: {
+          es: 'Sándwiches, carnes frías y quesos JSON',
+          en: 'Sandwiches, cold cuts & cheeses JSON',
+        },
+        colorBase: '#3341cb',
+        active: true,
+      },
+      {
+        key: 'coffee',
+        title: { es: 'Cafetería JSON', en: 'Hot Food JSON' },
+        subTitle: {
+          es: 'Hamburguesas, bebidas y postres JSON',
+          en: 'Burgers, beverages & desserts JSON',
+        },
+        colorBase: '#eda123',
+        active: false,
+      },
+      {
+        key: 'restaurant',
+        title: { en: 'Cafe & Bakery JSON', es: 'Restaurante JSON' },
+        subTitle: {
+          en: 'Hot drinks, donuts & baked goods JSON',
+          es: 'Bebidas calientes, donuts y panadería JSON',
+        },
+        colorBase: '#1ea24d',
+        active: true,
+      },
     ],
   },
   splashPage: {
@@ -216,7 +245,7 @@ export const defaultKioskConfig: KioskConfig = {
     idleWarningSeconds: 60,
   },
   localization: {
-    defaultLanguage: 'en',
+    defaultLanguage: 'es',
     supportedLanguages: ['en', 'es'],
     rtl: false,
   },
@@ -246,11 +275,20 @@ function defaultSupportEmail(email: string): string {
 
 function legacyServiceTypeToArray(
   legacyServiceType: string,
+  supportedLanguages: string[],
 ): ServiceType[] {
   const key = legacyServiceType.toLowerCase();
+  const title = Object.fromEntries(
+    supportedLanguages.map((lang) => [lang, legacyServiceType]),
+  );
+  const subTitle = Object.fromEntries(
+    supportedLanguages.map((lang) => [lang, '']),
+  );
   return [
     {
       key,
+      title,
+      subTitle,
       colorBase:
         defaultLegacyServiceTypeColors[legacyServiceType] || '#3341cb',
       active: true,
@@ -280,7 +318,10 @@ export function migrateLegacyArray(
       timezone: active.company.timezone || 'America/New_York',
       dateFormat: active.company.dateFormat || 'MM/DD/YYYY',
       currency: active.company.currency || 'USD',
-      serviceType: legacyServiceTypeToArray(active.company.serviceType || 'Deli'),
+      serviceType: legacyServiceTypeToArray(
+        active.company.serviceType || 'Deli',
+        active.localization.supportedLanguages,
+      ),
     },
     splashPage: { darkLogo: false },
     branding: active.branding,
