@@ -52,6 +52,34 @@ The new product model treats the file as a single kiosk configuration per deploy
 7. Save the migrated object back to the config file so the legacy format is no longer loaded.
 8. Rollback: restore the previous JSON file from backup or version control.
 
+## Config File Location Decision
+
+**Decision**: The canonical on-disk location for `tecnicaSystemsKioskSettings.json` is a **system-wide shared directory**, not next to the binary or in a per-user profile.
+
+| Platform | Path |
+|---|---|
+| Windows | `C:\ProgramData\TecnicaSystems\eKiosk\tecnicaSystemsKioskSettings.json` |
+| macOS | `/Library/Application Support/TecnicaSystems/eKiosk/tecnicaSystemsKioskSettings.json` |
+| Dev | `process.cwd()/tecnicaSystemsKioskSettings.json` (unchanged) |
+
+**Rationale:**
+- `%ProgramData%` / system `/Library/Application Support/` is readable by all OS users and writable by admins — the correct model when the settings utility (run by IT) and the eKiosk runtime (run as a dedicated kiosk OS account) are different OS users.
+- `%APPDATA%` / per-user `~/Library/...` is invisible across OS user accounts, which breaks the settings-utility-writes / kiosk-runtime-reads flow in locked-down kiosk deployments.
+- A fully custom root dir (e.g. `C:\ekiosk_settings\`) is non-standard, requires manual ACL setup, and has no clean macOS parallel.
+- Aligns with `perMachine: true` in the NSIS build config — this is a machine-scoped installation, not a user-scoped one.
+
+**Permissions:**
+- **Windows**: NSIS installer creates the directory and sets ACLs so the kiosk service account can read; admin users can write without UAC prompts.
+- **macOS**: Writing to `/Library/Application Support/` requires the settings utility to run as an admin user (standard for an IT/technician-facing tool). A one-time `chmod g+w` on the directory during install can allow designated non-root users to write if needed.
+
+**Resolution code** (to implement in `src/main.ts` `getDefaultConfigPath()`):
+```ts
+if (process.platform === 'win32') {
+  return path.join(process.env.ProgramData ?? 'C:\\ProgramData', 'TecnicaSystems', 'eKiosk', CONFIG_FILE_NAME);
+}
+return path.join('/Library/Application Support', 'TecnicaSystems', 'eKiosk', CONFIG_FILE_NAME);
+```
+
 ## Open Questions
 
 - Do the downstream eKiosk clients use `serviceType` as a string today, or can they be updated in the same release? (Assumed: yes, this is a coordinated contract change.)

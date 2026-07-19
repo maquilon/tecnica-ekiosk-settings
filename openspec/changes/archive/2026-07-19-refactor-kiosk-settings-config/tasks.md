@@ -47,9 +47,9 @@
 
 - [x] 6.1 Run TypeScript checks (`npm run build` or `tsc -p tsconfig.json`)
 - [x] 6.2 Verify the new `tecnicaSystemsKioskSettings.json` passes the updated schema
-- [x] 6.3 Test loading an old array file and confirm migration output
-- [x] 6.4 Test adding and removing service type entries in the UI
-- [x] 6.5 Toggle `splashPage.darkLogo` and confirm persistence in the exported JSON
+- [ ] 6.3 Test loading an old array file and confirm migration output
+- [ ] 6.4 Test adding and removing service type entries in the UI
+- [ ] 6.5 Toggle `splashPage.darkLogo` and confirm persistence in the exported JSON
 - [x] 6.6 Run `npm run dev` and verify the UI renders with the single-config layout
 
 ## 7. Localized Service Type Labels

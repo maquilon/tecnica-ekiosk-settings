@@ -2,8 +2,8 @@
   "company": {
     "id": "7e691896",
     "name": "Tecnica Systems LLC",
-    "displayName": "Tecnica Systems JSON",
-    "slogan": "Smart eKiosk JSON",
+    "displayName": "Tecnica Systems",
+    "slogan": "Smart eKiosk",
     "domain": "https://tecnicasystems.com",
     "supportEmail": "support@tecnicasystems.com",
     "timezone": "America/New_York",
@@ -13,12 +13,12 @@
       {
         "key": "deli",
         "title": {
-          "en": "Deli JSON",
-          "es": "Deli JSON"
+          "en": "Deli",
+          "es": "Deli"
         },
         "subTitle": {
-          "es": "Sándwiches, carnes frías y quesos JSON",
-          "en": "Sandwiches, cold cuts & cheeses JSON"
+          "es": "Sándwiches, carnes frías y quesos",
+          "en": "Sandwiches, cold cuts & cheeses"
         },
         "colorBase": "#3341cb",
         "active": true
@@ -26,12 +26,12 @@
       {
         "key": "coffee",
         "title": {
-          "es": "Cafetería JSON",
-          "en": "Hot Food JSON"
+          "es": "Cafetería",
+          "en": "Hot Food"
         },
         "subTitle": {
-          "es": "Hamburguesas, bebidas y postres JSON",
-          "en": "Burgers, beverages & desserts JSON"
+          "es": "Hamburguesas, bebidas y postres",
+          "en": "Burgers, beverages & desserts"
         },
         "colorBase": "#eda123",
         "active": true
@@ -39,12 +39,12 @@
       {
         "key": "restaurant",
         "title": {
-          "en": "Cafe & Bakery JSON",
-          "es": "Restaurante JSON"
+          "en": "Cafe & Bakery",
+          "es": "Restaurante"
         },
         "subTitle": {
-          "en": "Hot drinks, donuts & baked goods JSON",
-          "es": "Bebidas calientes, donuts y panadería JSON"
+          "en": "Hot drinks, donuts & baked goods",
+          "es": "Bebidas calientes, donuts y panadería"
         },
         "colorBase": "#1ea24d",
         "active": true
@@ -107,7 +107,7 @@
   "metadata": {
     "version": "1.0.0",
     "createdAt": "2026-07-11T21:46:46.294Z",
-    "updatedAt": "2026-07-16T01:19:26.064Z"
+    "updatedAt": "2026-07-16T01:25:50.202Z"
   },
   "active": true
 }

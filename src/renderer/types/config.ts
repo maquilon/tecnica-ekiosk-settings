@@ -159,8 +159,8 @@ export const defaultKioskConfig: KioskConfig = {
   company: {
     id: '7e691896',
     name: 'Tecnica Systems LLC',
-    displayName: 'Tecnica Systems JSON',
-    slogan: 'Smart eKiosk JSON',
+    displayName: 'Tecnica Systems',
+    slogan: 'Smart eKiosk',
     domain: 'https://tecnicasystems.com',
     supportEmail: 'support@tecnicasystems.com',
     timezone: 'America/New_York',
@@ -169,30 +169,30 @@ export const defaultKioskConfig: KioskConfig = {
     serviceType: [
       {
         key: 'deli',
-        title: { en: 'Deli JSON', es: 'Deli JSON' },
+        title: { en: 'Deli', es: 'Deli' },
         subTitle: {
-          es: 'Sándwiches, carnes frías y quesos JSON',
-          en: 'Sandwiches, cold cuts & cheeses JSON',
+          es: 'Sándwiches, carnes frías y quesos',
+          en: 'Sandwiches, cold cuts & cheeses',
         },
         colorBase: '#3341cb',
         active: true,
       },
       {
         key: 'coffee',
-        title: { es: 'Cafetería JSON', en: 'Hot Food JSON' },
+        title: { es: 'Cafetería', en: 'Hot Food' },
         subTitle: {
-          es: 'Hamburguesas, bebidas y postres JSON',
-          en: 'Burgers, beverages & desserts JSON',
+          es: 'Hamburguesas, bebidas y postres',
+          en: 'Burgers, beverages & desserts',
         },
         colorBase: '#eda123',
         active: false,
       },
       {
         key: 'restaurant',
-        title: { en: 'Cafe & Bakery JSON', es: 'Restaurante JSON' },
+        title: { en: 'Cafe & Bakery', es: 'Restaurante' },
         subTitle: {
-          en: 'Hot drinks, donuts & baked goods JSON',
-          es: 'Bebidas calientes, donuts y panadería JSON',
+          en: 'Hot drinks, donuts & baked goods',
+          es: 'Bebidas calientes, donuts y panadería',
         },
         colorBase: '#1ea24d',
         active: true,
