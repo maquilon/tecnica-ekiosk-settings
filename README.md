@@ -105,8 +105,20 @@ The configuration file is a single JSON object with the following structure:
     "dateFormat": "...",
     "currency": "...",
     "serviceType": [
-      { "key": "deli", "colorBase": "#3341cb" },
-      { "key": "coffee", "colorBase": "#eda123" }
+      {
+        "key": "deli",
+        "title": { "en": "Deli", "es": "Deli" },
+        "subTitle": { "en": "Sandwiches, cold cuts & cheeses", "es": "Sándwiches, carnes frías y quesos" },
+        "colorBase": "#3341cb",
+        "active": true
+      },
+      {
+        "key": "coffee",
+        "title": { "en": "Hot Food", "es": "Cafetería" },
+        "subTitle": { "en": "Burgers, beverages & desserts", "es": "Hamburguesas, bebidas y postres" },
+        "colorBase": "#eda123",
+        "active": true
+      }
     ]
   },
   "splashPage": { "darkLogo": false },
@@ -121,7 +133,7 @@ The configuration file is a single JSON object with the following structure:
 }
 ```
 
-`serviceType` is an array of objects, each with a unique key and a hex color. `splashPage.darkLogo` controls the splash screen logo theme.
+`serviceType` is an array of objects, each with a unique key, hex color, and localized `title`/`subTitle` records. `splashPage.darkLogo` controls the splash screen logo theme.
 
 ---
 
@@ -182,7 +194,7 @@ The preload script exposes the following methods to the renderer via `window.ele
 
 ## Workflow
 
-1. **Launch** — The app loads `tecnicaSystemsKioskSettings.json` from the executable's directory (production) or project root (development). If the file is missing, a default single-profile configuration is loaded. Legacy multi-company arrays are automatically migrated to the new format.
+1. **Launch** — The app loads `tecnicaSystemsKioskSettings.json` from a system-wide data directory (see *Configuration File Location* below). If the file is missing, a default single-profile configuration is loaded. Legacy multi-company arrays are automatically migrated to the new format.
 2. **Edit** — Navigate between the nine configuration tabs and modify fields. Validation feedback appears in real-time.
 3. **Save** — Click *Save Configuration* or let autosave handle it. Changes write directly to the config file on disk.
 4. **Deploy** — The resulting JSON file is consumed by the eKiosk platform at runtime.
@@ -228,9 +240,10 @@ After running the build process, the `release/` directory contains two distribut
 4. **Configuration file location**:
    - The app reads/writes the configuration at:
      ```
-     C:\Tecnica_Systems\Kiosk_Settings\tecnicaSystemsKioskSettings.json
+     C:\ProgramData\TecnicaSystems\eKiosk\tecnicaSystemsKioskSettings.json
      ```
-   - This directory is created automatically on first launch
+   - This is a system-wide directory shared across all users
+   - The directory is created automatically on first launch by the installer
    - Place your existing configuration file here if migrating from another machine
 
 5. **Verify the installation**:
@@ -257,8 +270,9 @@ After running the build process, the `release/` directory contains two distribut
 
 2. **File permissions**: Ensure the service account or user running the app has read/write access to:
    ```
-   C:\Tecnica_Systems\Kiosk_Settings\tecnicaSystemsKioskSettings.json
+   C:\ProgramData\TecnicaSystems\eKiosk\tecnicaSystemsKioskSettings.json
    ```
+   - The installer sets appropriate ACLs for admin write and kiosk account read
 
 3. **Auto-start (optional)**: To launch on server boot, create a Scheduled Task:
    ```powershell
@@ -288,3 +302,24 @@ npx electron-builder --win --x64
 ```
 
 The output will appear in the `release/` directory. Cross-compilation from macOS/Linux to Windows is supported by electron-builder out of the box.
+
+---
+
+## Configuration File Location
+
+The configuration file is stored in OS-standard system-wide directories to support shared access between the settings utility (run by IT/admin) and the eKiosk runtime (run as a dedicated kiosk account).
+
+| Platform | Path |
+|---|---|
+| Windows | `C:\ProgramData\TecnicaSystems\eKiosk\tecnicaSystemsKioskSettings.json` |
+| macOS | `/Library/Application Support/TecnicaSystems/eKiosk/tecnicaSystemsKioskSettings.json` |
+| Development | `process.cwd()/tecnicaSystemsKioskSettings.json` (project root) |
+
+### Permissions
+
+- **Windows**: The NSIS installer creates the directory and sets ACLs so admin users can write and the kiosk service account can read. No elevation required after install.
+- **macOS**: Writing to `/Library/Application Support/` requires admin privileges. The settings utility should be run by an admin user (IT/technician). A one-time `chmod g+w` on the directory during install can allow designated non-root users to write if needed.
+
+### Custom Path Override
+
+If the default location doesn't fit your deployment, the app supports selecting a custom config file path via the file picker dialog. The selected path is persisted in the app settings and used on subsequent launches.
